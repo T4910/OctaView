@@ -3,26 +3,28 @@ import './App.css'
 import axios from 'axios'
 import { useState } from 'react'
 
+const serverLink = import.meta.env.VITE_SERVER_LINK
+
 function App() {
   const [data, setData] = useState(null)
 
   useEffect(() => {
     const initialFetch = async () => {
-      const response = await axios.post('http://localhost:8080/')
-      setData(response)
+      const response = await axios.get(`${serverLink}/`)
+      setData(response?.data)
     }
 
     initialFetch()
-  })
+  }, [])
 
   if (!data) {
-    return <div>loading</div>
+    return <div>loading...</div>
   }
 
   return (
     <>
       <div>HOMEPAGE</div>
-      <div>{data && <p>data</p>}</div>
+      <div>{data && <p>{data.message}</p>}</div>
     </>
   )
 }
