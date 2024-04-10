@@ -8,6 +8,7 @@ import './index.css'
 //? existing imports
 import Root from './routes/root'
 import ErrorPage from './Error-page'
+import Login from './components/login/Index'
 
 const router = createBrowserRouter([
   {
@@ -17,16 +18,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <div>Login page under construction</div>
-  },
-  {
-    path: '/view-timetable',
-    element: <div>View time table page under construction</div>
+    element: <Login />,
+    errorElement: <ErrorPage />
   }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router = {router} />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 )
