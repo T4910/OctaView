@@ -12,20 +12,22 @@ function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
         const response = await axios.post(`${serverLink}/login`, { email, password })
         if (response) {
+            setIsLoading(false)
             if (response.status === 200) {
                 if (response.data.role === 'faculty') {
-                    navigate('/')
-                    console.log('faculty');
+                    navigate('/faculty-timetable')
                 } else if (response.data.role === 'staff') {
-                    navigate('/')
-                    console.log('staff');
+                    navigate('/staff-timetable')
                 }
+            } else {
+                setError(response.data.message || response)
             }
             setIsLoading(false)
         }
@@ -42,6 +44,7 @@ function Login() {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <br />
                 <button type="submit" id={isLoading ? styles.submit : ''} disabled={isLoading}>Login</button>
+                {error && <div id={styles.error}>{error}</div>}
             </form>
         </div>
     )
