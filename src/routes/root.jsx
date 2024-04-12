@@ -1,6 +1,7 @@
 import React from "react"
 import styles from './Root.module.css'
-import { Link, Outlet } from "react-router-dom"
+import { Link } from "react-router-dom"
+import TimeTable from '../components/timetable/Index'
 
 export default function Root() {
     return (
@@ -11,9 +12,9 @@ export default function Root() {
                 </li>
             </nav>
             <header>
-                <h1>HomePage</h1>
-                <div>TimeTable</div>
+                <h1>Landmark University Timetable</h1>
             </header>
+            <TimeTable />
         </>
     )
 }
