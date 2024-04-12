@@ -17,19 +17,24 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
-        const response = await axios.post(`${serverLink}/login`, { email, password })
-        if (response) {
-            setIsLoading(false)
-            if (response.status === 200) {
-                if (response.data.role === 'faculty') {
-                    navigate('/faculty-timetable')
-                } else if (response.data.role === 'staff') {
-                    navigate('/staff-timetable')
+        setError(null)
+        try {
+            const response = await axios.post(`${serverLink}/login`, { email, password })
+            if (response) {
+                if (response.status === 200) {
+                    if (response.data.role === 'faculty') {
+                        navigate('/faculty-timetable')
+                    } else if (response.data.role === 'staff') {
+                        navigate('/staff-timetable')
+                    }
+                } else {
+                    setError(response.data.message || response)
                 }
-            } else {
-                setError(response.data.message || response)
+                setIsLoading(false)
             }
+        } catch (error) {
             setIsLoading(false)
+            setError(error?.response?.data?.message)
         }
     }
 

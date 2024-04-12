@@ -10,7 +10,7 @@ import Root from './routes/root'
 import ErrorPage from './Error-page'
 import Login from './components/login/Index'
 import Staff from './components/staff/Index'
-import Faculty from './components/faculty/Index'
+import Admin from './components/admin/Index'
 
 const router = createBrowserRouter([
   {
@@ -29,8 +29,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />
   },
   {
-    path: '/faculty-timetable',
-    element: <Faculty />,
+    path: '/admin-timetable',
+    element: <Admin />,
     errorElement: <ErrorPage />
   }
 ])
