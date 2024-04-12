@@ -4,7 +4,7 @@ import TimeTable from '../timetable/Index'
 function Index() {
   return (
     <div>
-      <h1>Staff Timetable</h1>
+      <h1>Landmark University Timetable</h1>
       <TimeTable />
     </div>
   )
