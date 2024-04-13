@@ -5,7 +5,6 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import './index.css'
-//? existing imports
 import Root from './routes/root'
 import ErrorPage from './Error-page'
 import Login from './components/login/Index'
@@ -24,12 +23,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />
   },
   {
-    path: '/staff-timetable',
+    path: '/faculty',
     element: <Staff />,
     errorElement: <ErrorPage />
   },
   {
-    path: '/admin-timetable',
+    path: '/admin',
     element: <Admin />,
     errorElement: <ErrorPage />
   }
