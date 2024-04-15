@@ -1,5 +1,5 @@
 import React from 'react'
-import TimeTable from '../timetable/Index'
+import TimeTable from '../timetable'
 
 function Index() {
   return (

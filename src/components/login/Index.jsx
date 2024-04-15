@@ -2,18 +2,14 @@ import { useState, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import Error from "@/components/login/_components/error"
+import Error from "@/components/login/error"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Card, CardContent, CardDescription,
+  CardFooter, CardHeader, CardTitle,
+} from "@/components/ui/card"
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
@@ -54,29 +50,12 @@ function Login() {
         setIsLoading(false);
     }
 
-    /*
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <label>Email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <br />
-                <label>Password</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <br />
-                <button type="submit" id={isLoading ? styles.submit : ''} disabled={isLoading}>Login</button>
-                {error && <div id={styles.error}>{error}</div>}
-            </form>
-        </div>
-    )
-*/
-    return (
-        <Card className="w-full max-w-sm">
+        <Card className="w-full max-w-sm mx-auto">
             <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>
-                Enter your email below to login to your account.
+                Enter your school email below to login.
                 </CardDescription>
             </CardHeader>
             <form onSubmit={handleSubmit}>
