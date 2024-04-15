@@ -3,8 +3,9 @@ import {
     TableFooter, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table"
 import TableTop from "@/components/tableTop"
+import Event from "@/components/tEvents"
 
-function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
+function Index({ schedule: { startDay, endDay, lectureHours, departments, mode } }) {
     const daysOfWeek = getDaysOfWeek(startDay, endDay);
 
     // parameters are in date time format.
@@ -16,22 +17,10 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
     const selectedDepartment = 'Computer Science';
 
     return (
-        <>
-            <div>
-                <table id="data_Table" class="display dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="data_Table_info">
-                    <thead>
-                        <tr bgcolor="#C2CBD0" role="row"><td colspan="12" align="center" rowspan="1">Weekly Lecture Timetable</td></tr>
-                        <tr bgcolor="#C2CBD0" role="row"><td class="sorting_asc" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SN: activate to sort column ascending">SN</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="DAYS: activate to sort column ascending">DAYS</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="08-09: activate to sort column ascending">08-09</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="09-10: activate to sort column ascending">09-10</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="10-11: activate to sort column ascending">10-11</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="11-12: activate to sort column ascending">11-12</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="12-01: activate to sort column ascending">12-01</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="01-02: activate to sort column ascending">01-02</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="02-03: activate to sort column ascending">02-03</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="03-04: activate to sort column ascending">03-04</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="04-05: activate to sort column ascending">04-05</td><td class="sorting" tabindex="0" aria-controls="data_Table" rowspan="1" colspan="1" aria-label="05-06: activate to sort column ascending">05-06</td></tr>
-                    </thead>
-                    <tbody>
-                        <tr role="row" class="odd"><td class="sorting_1">1</td><td>Monday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">2</td><td>Tuesday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="odd"><td class="sorting_1">3</td><td>Wednesday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">4</td><td>Thursday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="odd"><td class="sorting_1">5</td><td>Friday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">6</td><td>Saturday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
-
-                </table>
-            </div>
-
+        <div>
+            <TableTop mode={mode}/>            
             <Table>
                 <TableHeader>
-                    {/* <TableTop />             */}
                     <TableRow>
                         <TableHead className="w-9">S/N</TableHead>
                         <TableHead>DAYS</TableHead>
@@ -52,11 +41,11 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                     <>
                         {
                             daysOfWeek.map((day, index) => {      
-                                 const activitiesWithTimeRange = {}, 
-                                 activitiesForEachHour = {}, 
-                                 activities =  departments[selectedDepartment][selectedLevel][day.toLowerCase()];
-     
-                                 activities?.map(({ startTime, endTime, ...rest }) => {
+                                const activitiesWithTimeRange = {}, 
+                                activitiesForEachHour = {}, 
+                                activities =  departments[selectedDepartment][selectedLevel][day.toLowerCase()];
+    
+                                activities?.map(({ startTime, endTime, ...rest }) => {
                                     //  CONVERTS activities array to object
                                     //  [{startTime:..., endTime:..., ....}] -> {'startTime-endTime': {....}}
 
@@ -86,14 +75,10 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                         }
                                     }
                                 })
-
-                                console.log('\nCURRENT DAY: ', day, activitiesForEachHour);
-
-
-                                 
-                                 
-                                 return (
-                                     <TableRow>
+                                
+                                
+                                return (
+                                    <TableRow>
                                         <TableCell className="font-medium">{index+1}</TableCell>
                                         <TableCell>{day}</TableCell>
 
@@ -116,11 +101,17 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                                         // 3. If outside time frame, render cell but don't show any courses
                                                         (properties?.rangeIndex <= 0) 
                                                         ? (
-                                                            <TableCell className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange??1 : 1} asChild>
-                                                                {(properties?.rangeIndex === -1) ? '' : <p className="bg-red-200 text-center">{properties?.activity?.name}</p>}
+                                                            <TableCell className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange??1 : 1}>
+                                                                {(properties?.rangeIndex === -1) 
+                                                                ? '' 
+                                                                : <Event 
+                                                                    name={properties?.activity?.name}
+                                                                    venue={properties?.activity?.venue}
+                                                                    lecturer={properties?.activity?.coordinator}
+                                                                />}
                                                             </TableCell>
                                                         ) : null
-                                                     )
+                                                    )
                                                 })
                                             }
                                         </>
@@ -131,8 +122,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                     </>
                 </TableBody>
             </Table>
-
-        </>
+        </div>
     )
 }
 
