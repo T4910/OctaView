@@ -17,7 +17,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
 
     return (
         <>
-            <div>
+            {/* <div>
                 <table id="data_Table" class="display dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="data_Table_info">
                     <thead>
                         <tr bgcolor="#C2CBD0" role="row"><td colspan="12" align="center" rowspan="1">Weekly Lecture Timetable</td></tr>
@@ -27,7 +27,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                         <tr role="row" class="odd"><td class="sorting_1">1</td><td>Monday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">2</td><td>Tuesday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="odd"><td class="sorting_1">3</td><td>Wednesday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">4</td><td>Thursday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="odd"><td class="sorting_1">5</td><td>Friday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr role="row" class="even"><td class="sorting_1">6</td><td>Saturday</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
 
                 </table>
-            </div>
+            </div> */}
 
             <Table>
                 <TableHeader>
@@ -51,12 +51,12 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                 <TableBody>
                     <>
                         {
-                            daysOfWeek.map((day, index) => {      
-                                 const activitiesWithTimeRange = {}, 
-                                 activitiesForEachHour = {}, 
-                                 activities =  departments[selectedDepartment][selectedLevel][day.toLowerCase()];
-     
-                                 activities?.map(({ startTime, endTime, ...rest }) => {
+                            daysOfWeek.map((day, index) => {
+                                const activitiesWithTimeRange = {},
+                                    activitiesForEachHour = {},
+                                    activities = departments[selectedDepartment][selectedLevel][day.toLowerCase()];
+
+                                activities?.map(({ startTime, endTime, ...rest }) => {
                                     //  CONVERTS activities array to object
                                     //  [{startTime:..., endTime:..., ....}] -> {'startTime-endTime': {....}}
 
@@ -69,7 +69,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                 // results to another object which holds every hour range which
                                 // holds information on the activity and meta-data for positioning 
                                 // on the timetable per that hour.
-                                hourRanges.map((range) => {     
+                                hourRanges.map((range) => {
                                     for (const activityRange in activitiesWithTimeRange) {
                                         if (Object.hasOwnProperty.call(activitiesWithTimeRange, activityRange)) {
                                             const index = getRangeIndex(range, activityRange);
@@ -82,7 +82,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                                 rangeIndex: index,
                                                 spanRange: duration,
                                                 activity: activityDetails
-                                            } 
+                                            }
                                         }
                                     }
                                 })
@@ -90,19 +90,19 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                 console.log('\nCURRENT DAY: ', day, activitiesForEachHour);
 
 
-                                 
-                                 
-                                 return (
-                                     <TableRow>
-                                        <TableCell className="font-medium">{index+1}</TableCell>
+
+
+                                return (
+                                    <TableRow>
+                                        <TableCell className="font-medium">{index + 1}</TableCell>
                                         <TableCell>{day}</TableCell>
 
                                         {/* Arrangment of courses per day*/}
                                         <>
-                                            { 
+                                            {
                                                 // iterates through each range of time and inputs a course if matches with time
                                                 // Also expands (spans) the course if it takes more hours
-                                                hourRanges.map((range) => {  
+                                                hourRanges.map((range) => {
                                                     let properties = activitiesForEachHour[range]
 
                                                     let rangeIndex = -1;
@@ -114,17 +114,17 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments } }) {
                                                         // 2. Expand cell if course spends more than 1hr - doesn't render the cells that are
                                                         //     within the time frame for accurate represenation 
                                                         // 3. If outside time frame, render cell but don't show any courses
-                                                        (properties?.rangeIndex <= 0) 
-                                                        ? (
-                                                            <TableCell className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange??1 : 1} asChild>
-                                                                {(properties?.rangeIndex === -1) ? '' : <p className="bg-red-200 text-center">{properties?.activity?.name}</p>}
-                                                            </TableCell>
-                                                        ) : null
-                                                     )
+                                                        (properties?.rangeIndex <= 0)
+                                                            ? (
+                                                                <TableCell className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange ?? 1 : 1} asChild>
+                                                                    {(properties?.rangeIndex === -1) ? '' : <p className="bg-red-200 text-center">{properties?.activity?.name}</p>}
+                                                                </TableCell>
+                                                            ) : null
+                                                    )
                                                 })
                                             }
                                         </>
-                                    </TableRow>             
+                                    </TableRow>
                                 )
                             })
                         }
@@ -140,12 +140,12 @@ function getDaysOfWeek(startDay, endDay) {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const startIndex = daysOfWeek.indexOf(startDay);
     const endIndex = daysOfWeek.indexOf(endDay);
-    
+
     if (startIndex === -1 || endIndex === -1) {
         console.error('Invalid start or end day specified.');
         return [];
     }
-    
+
     if (startIndex <= endIndex) {
         return daysOfWeek.slice(startIndex, endIndex + 1);
     } else {
@@ -159,10 +159,10 @@ function getHourRanges(startTime, endTime) {
     // Convert time strings to Date objects
     const startDate = new Date(`2000-01-01 ${startTime}`);
     const endDate = new Date(`2000-01-01 ${endTime}`);
-    
+
     // Array to store hour ranges
     const hourRanges = [];
-    
+
     // Loop through each hour from start time to end time
     let currentDate = startDate;
     while (currentDate < endDate) {
@@ -171,7 +171,7 @@ function getHourRanges(startTime, endTime) {
         const endHour = currentDate.getHours().toString().padStart(2, '0');
         hourRanges.push(`${startHour}-${endHour}`);
     }
-    
+
     return hourRanges;
 }
 
@@ -182,7 +182,7 @@ function formatHourRange(startDate, endDate) {
     const startHour = startDate.getHours().toString().padStart(2, '0');
     const endHour = endDate.getHours().toString().padStart(2, '0');
     return `${startHour}-${endHour}`; // returns 24h system
-} 
+}
 
 function calculateHoursInRange(hourRange) {
     // if entered '12-15' returns 3 
@@ -192,11 +192,11 @@ function calculateHoursInRange(hourRange) {
     return hoursInRange > 0 ? hoursInRange : 24 + hoursInRange;
 }
 
-function getRangeIndex(smallRange, largeRange){
+function getRangeIndex(smallRange, largeRange) {
     const [smallStart, smallEnd] = smallRange.split('-').map(Number);
     const [largeStart, largeEnd] = largeRange.split('-').map(Number);
 
-    if(smallEnd - smallStart !== 1) return null;
+    if (smallEnd - smallStart !== 1) return null;
 
     const index = (largeEnd >= smallEnd && largeStart <= smallStart) ? smallStart - largeStart : -1;
     return index;

@@ -11,7 +11,7 @@ export default function ErrorPage() {
             <p>
                 <i>{error.statusText || error.message}</i>
             </p>
-            <Link to='/'>Click to return home</Link>
+            <Link to='/' style={{ color: 'blue' }}>Click to return home</Link>
         </div>
     )
 }

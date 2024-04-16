@@ -32,13 +32,15 @@ function Login() {
         setError(null);
         
         try {
-            const response = await axios.post(`${serverLink}/login`, { email, password })
+            const response = await axios.post(`${serverLink}/user/login`, { email, password })
             if (response?.status === 200) {
                 console.log(response, email, password, 34231);
                 if (response.data.role === 'faculty') {
-                    navigate('/faculty-timetable')
+                    navigate('/faculty')
                 } else if (response.data.role === 'admin') {
                     navigate('/admin')
+                } else if (response.data.role === 'student') {
+                    navigate('/')
                 }
             } else {
                 setError(response.data.message || response)
