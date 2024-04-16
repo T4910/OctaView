@@ -59,7 +59,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                 // results to another object which holds every hour range which
                                 // holds information on the activity and meta-data for positioning 
                                 // on the timetable per that hour.
-                                hourRanges.map((range) => {     
+                                hourRanges.map((range) => {
                                     for (const activityRange in activitiesWithTimeRange) {
                                         if (Object.hasOwnProperty.call(activitiesWithTimeRange, activityRange)) {
                                             const index = getRangeIndex(range, activityRange);
@@ -72,7 +72,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                                 rangeIndex: index,
                                                 spanRange: duration,
                                                 activity: activityDetails
-                                            } 
+                                            }
                                         }
                                     }
                                 })
@@ -85,10 +85,10 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
 
                                         {/* Arrangment of courses per day*/}
                                         <>
-                                            { 
+                                            {
                                                 // iterates through each range of time and inputs a course if matches with time
                                                 // Also expands (spans) the course if it takes more hours
-                                                hourRanges.map((range) => {  
+                                                hourRanges.map((range) => {
                                                     let properties = activitiesForEachHour[range]
 
                                                     let rangeIndex = -1;
@@ -116,7 +116,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                                 })
                                             }
                                         </>
-                                    </TableRow>             
+                                    </TableRow>
                                 )
                             })
                         }
@@ -131,12 +131,12 @@ function getDaysOfWeek(startDay, endDay) {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const startIndex = daysOfWeek.indexOf(startDay);
     const endIndex = daysOfWeek.indexOf(endDay);
-    
+
     if (startIndex === -1 || endIndex === -1) {
         console.error('Invalid start or end day specified.');
         return [];
     }
-    
+
     if (startIndex <= endIndex) {
         return daysOfWeek.slice(startIndex, endIndex + 1);
     } else {
@@ -150,10 +150,10 @@ function getHourRanges(startTime, endTime) {
     // Convert time strings to Date objects
     const startDate = new Date(`2000-01-01 ${startTime}`);
     const endDate = new Date(`2000-01-01 ${endTime}`);
-    
+
     // Array to store hour ranges
     const hourRanges = [];
-    
+
     // Loop through each hour from start time to end time
     let currentDate = startDate;
     while (currentDate < endDate) {
@@ -162,7 +162,7 @@ function getHourRanges(startTime, endTime) {
         const endHour = currentDate.getHours().toString().padStart(2, '0');
         hourRanges.push(`${startHour}-${endHour}`);
     }
-    
+
     return hourRanges;
 }
 
@@ -173,7 +173,7 @@ function formatHourRange(startDate, endDate) {
     const startHour = startDate.getHours().toString().padStart(2, '0');
     const endHour = endDate.getHours().toString().padStart(2, '0');
     return `${startHour}-${endHour}`; // returns 24h system
-} 
+}
 
 function calculateHoursInRange(hourRange) {
     // if entered '12-15' returns 3 
@@ -183,11 +183,11 @@ function calculateHoursInRange(hourRange) {
     return hoursInRange > 0 ? hoursInRange : 24 + hoursInRange;
 }
 
-function getRangeIndex(smallRange, largeRange){
+function getRangeIndex(smallRange, largeRange) {
     const [smallStart, smallEnd] = smallRange.split('-').map(Number);
     const [largeStart, largeEnd] = largeRange.split('-').map(Number);
 
-    if(smallEnd - smallStart !== 1) return null;
+    if (smallEnd - smallStart !== 1) return null;
 
     const index = (largeEnd >= smallEnd && largeStart <= smallStart) ? smallStart - largeStart : -1;
     return index;
