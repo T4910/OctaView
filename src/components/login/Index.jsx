@@ -23,7 +23,6 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
@@ -36,7 +35,7 @@ function Login() {
             if (response?.status === 200) {
                 console.log(response, email, password, 34231);
                 if (response.data.role === 'faculty') {
-                    navigate('/faculty-timetable')
+                    navigate('/faculty')
                 } else if (response.data.role === 'admin') {
                     navigate('/admin')
                 }
@@ -51,7 +50,7 @@ function Login() {
     }
 
     return (
-        <Card className="w-full max-w-sm mx-auto">
+        <Card className="max-w-sm mx-auto mt-32">
             <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>

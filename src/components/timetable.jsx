@@ -6,6 +6,7 @@ import TableTop from "@/components/tableTop"
 import Event from "@/components/tEvents"
 
 function Index({ schedule: { startDay, endDay, lectureHours, departments, mode } }) {
+    if(!(!!startDay)) return <p>Loading...</p>
     const daysOfWeek = getDaysOfWeek(startDay, endDay);
 
     // parameters are in date time format.
