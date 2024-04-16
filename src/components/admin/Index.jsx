@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import TimeTable from '../timetable'
+import Navbar from '@/components/admin/navbar'
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 // to be fetched from backend server
@@ -97,7 +98,7 @@ function Index() {
     async function getTimetable(){
       const response = await axios.post(`${serverLink}/schedule`, { level, department })
 
-      setSchedule(response?.data.schedule);
+      setSchedule(response?.data.schedule??selectedSchedule);
     }
 
     getTimetable();
@@ -106,6 +107,7 @@ function Index() {
   return (
     <div>
       <h1>Landmark University Timetable</h1>
+      <Navbar />
       <TimeTable schedule={schedule}/>
     </div>
   )
