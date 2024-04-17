@@ -1,42 +1,13 @@
 import Levels from "@/components/levelSelection"
 import Courses from "@/components/courseSelection"
+import Days from "@/components/daysSelection"
 
-const courses = [
-    {
-      value: "CSC",
-      label: "Computer Science",
-    },
-    {
-      value: "MAT",
-      label: "Mathematics",
-    },
-    {
-      value: "POS",
-      label: "Political Science",
-    },
-    {
-      value: "EIE",
-      label: "Electrical & Information Engineering",
-    },
-    {
-      value: "MCE",
-      label: "Mechanical Engineering",
-    },
-    {
-      value: "MTE",
-      label: "Mechatronics Engineering",
-    },
-    {
-      value: "BUS",
-      label: "Business Studies",
-    },
-  ]
-
-const selections = () => {
+const selections = ({ venue }) => {
   return (
     <div className="flex space-x-4">
+        { venue ? <Days /> : null}
         <Levels />
-        <Courses courses={courses}/>
+        <Courses />
     </div>
   )
 }
