@@ -10,6 +10,7 @@ import ErrorPage from './Error-page'
 import Login from './components/login/Index'
 import Staff from './components/staff/Index'
 import Admin from './components/admin/Index'
+import NewTimetable from "./components/admin/new-timetable-config/Index"
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element: <Admin />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/admin/new-timetable',
+    element: <NewTimetable />,
     errorElement: <ErrorPage />
   }
 ])

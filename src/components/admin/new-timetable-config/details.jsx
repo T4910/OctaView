@@ -47,11 +47,15 @@ const details = () => {
                       <h3 className="text-lg">Settings</h3>
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent >
                     <div className="grid gap-6 sm:grid-cols-3">
                     <div className="grid gap-3">
                         <Label htmlFor="subcategory">Courses</Label>
-                        <CourseSelection className="w-56" enableSelectAll={true}/>
+                        <CourseSelection 
+                          triggerClassName="w-56"
+                          contentClassName="w-fit" 
+                          enableSelectAll={true}
+                        />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="subcategory">Level</Label>

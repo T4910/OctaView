@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 const newTimetable = () => {
   return (
-    <Link to="/admin/new">
+    <Link to="/admin/new-timetable">
         <Button 
             // size="lg" 
             className="h-10 gap-2"
