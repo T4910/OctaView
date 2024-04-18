@@ -9,7 +9,9 @@ import Root from './routes/root'
 import ErrorPage from './Error-page'
 import Login from './components/login/Index'
 import Staff from './components/staff/Index'
-import Admin from './components/admin/Index'
+import AdminLayout from './components/admin/Layout'
+import AdminTimetables from './components/admin/Index'
+import AdminSettings from './components/admin/settings/Index'
 import NewTimetable from "./components/admin/new-timetable-config/Index"
 
 const router = createBrowserRouter([
@@ -30,7 +32,17 @@ const router = createBrowserRouter([
   },
   {
     path: '/admin',
-    element: <Admin />,
+    element: <AdminLayout />, // Wrap Admin component with layout
+    children: [
+      { 
+        index: true, 
+        element: <AdminTimetables />
+      }, // Default admin page
+      { 
+        path: 'settings', 
+        element: <AdminSettings /> 
+      },
+    ],
     errorElement: <ErrorPage />
   },
   {
