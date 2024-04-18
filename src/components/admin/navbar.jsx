@@ -1,5 +1,5 @@
-import { CircleUser, Menu, Package2, PlusCircle } from "lucide-react"
-import { Link } from "react-router-dom"
+import { CircleUser, Menu, Package2 } from "lucide-react"
+import { Link, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -12,40 +12,47 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Search from '@/components/admin/searchBox'
 import NewTimetable from '@/components/admin/newTimetable'
+import { cn } from "@/lib/utils"
 
-
-
+const links = [
+  { 
+    href: '/admin/',
+    value: 'Timetables',
+  },
+  { 
+    href: '/admin/settings',
+    value: 'Configurations'
+  },
+  { 
+    href: '#',
+    value: 'Issues',
+    disabled: true
+  },
+  { 
+    href: '#',
+    value: 'History',
+    disabled: true
+  },
+]
 
 const navbar = () => {
     const name = 'Taiwo Emmanuel';
+    const location = useLocation()
+    console.log(location, 3243)
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Timetable
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Issues
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            History
-          </Link>
-          <Link
-            href="#"
-            className="text-foreground transition-colors hover:text-foreground"
-          >
-            Configurations
-          </Link>
+          {
+            links.map(({ href, value, disabled }) => <Link
+              to={href}
+              children={value}
+              className={cn(
+                "text-muted-foreground transition-colors hover:text-foreground",
+                location.pathname === href && 'text-foreground',
+                disabled && 'opacity-50 hover:text-muted-foreground'
+              )}
+            />)
+          }
         </nav>
         <Sheet>
           <SheetTrigger asChild>
