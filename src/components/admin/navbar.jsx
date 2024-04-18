@@ -2,12 +2,8 @@ import { CircleUser, Menu, Package2 } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Search from '@/components/admin/searchBox'
@@ -16,11 +12,12 @@ import { cn } from "@/lib/utils"
 
 const links = [
   { 
-    href: '/admin/',
+    href: '',
+    url: ['/admin/timetable', '/admin/'],
     value: 'Timetables',
   },
   { 
-    href: '/admin/settings',
+    href: 'settings',
     value: 'Configurations'
   },
   { 
@@ -43,12 +40,13 @@ const navbar = () => {
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           {
-            links.map(({ href, value, disabled }) => <Link
-              to={href}
+            links.map(({ href, value, disabled, url }, index) => <Link
+              to={`/admin/${href}`}
+              key={index}
               children={value}
               className={cn(
                 "text-muted-foreground transition-colors hover:text-foreground",
-                location.pathname === href && 'text-foreground',
+                ((!!location.pathname.includes(href) && href !== '') || url?.includes(location.pathname)) && 'text-foreground',
                 disabled && 'opacity-50 hover:text-muted-foreground'
               )}
             />)
