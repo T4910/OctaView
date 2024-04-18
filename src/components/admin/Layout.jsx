@@ -6,10 +6,7 @@ export default function AdminLayout() {
     return (
       <>
         <Navbar />
-        <div className='flex'>
-            <Sidebar />
-            <Outlet />
-        </div>
+        <Outlet />
       </>
     );
 }
