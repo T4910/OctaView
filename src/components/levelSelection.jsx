@@ -13,7 +13,7 @@ const levelSelection = ({ className, enableSelectAll }) => {
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
-                {enableSelectAll ? <SelectItem value="all">All Levels</SelectItem> : null}
+                {enableSelectAll ? <SelectItem value="all"><span className="font-medium">All Levels</span></SelectItem> : null}
                 <SelectItem value="100">100 Level</SelectItem>
                 <SelectItem value="200">200 Level</SelectItem>
                 <SelectItem value="300">300 Level</SelectItem>

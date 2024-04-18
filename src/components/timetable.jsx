@@ -4,47 +4,45 @@ import {
 } from "@/components/ui/table"
 import TableTop from "@/components/tableTop"
 import Event from "@/components/tEvents"
+import { useState } from "react"
 
-function Index({ schedule: { startDay, endDay, lectureHours, departments, mode } }) {
+// TODO: add the timetable view mode that shows venues instead of days and have the day as a select 
+function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }, venue }) {
     if(!(!!startDay)) return <p>Loading...</p>
     const daysOfWeek = getDaysOfWeek(startDay, endDay);
+
+    const [ level, setLevel ] = useState(100);
+    const [ department, setDepartment ] = useState('Computer Science');
 
     // parameters are in date time format.
     //! NOTE -> datetime must be in hours only without minutes
     //! i.e "2018-02-23T13:00:00" NOT "2018-02-23T13:30:00"
     const hourRanges = getHourRanges(lectureHours.startHour, lectureHours.endHour); // returns an array of all hour ranges within the time specified
 
-    const selectedLevel = 100;
-    const selectedDepartment = 'Computer Science';
-
     return (
         <div>
-            <TableTop mode={mode}/>            
+            <TableTop mode={mode} venue={venue}/>            
             <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-9">S/N</TableHead>
-                        <TableHead>DAYS</TableHead>
+                        <TableHead>{venue ? 'VENUES' : 'DAYS'}</TableHead>
                         <>
                             {
                                 // Iterates through hour (24h formart) ranges rep. as strings 
                                 // i.e hourRanges = [..., '12-13', '13-14', ...]
-                                hourRanges.map((range) => {
-                                    return (
-                                        <TableHead className="min-w-10">{range}</TableHead>
-                                    )
-                                })
+                                hourRanges.map((range, index) => <TableHead key={index} className="min-w-10">{range}</TableHead>)
                             }
                         </>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                {!!startDay ? <TableBody>
                     <>
                         {
                             daysOfWeek.map((day, index) => {      
                                 const activitiesWithTimeRange = {}, 
                                 activitiesForEachHour = {}, 
-                                activities =  departments[selectedDepartment][selectedLevel][day.toLowerCase()];
+                                activities =  departments[department][level][day.toLowerCase()];
     
                                 activities?.map(({ startTime, endTime, ...rest }) => {
                                     //  CONVERTS activities array to object
@@ -79,7 +77,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                 
                                 
                                 return (
-                                    <TableRow>
+                                    <TableRow key={index}>
                                         <TableCell className="font-medium">{index+1}</TableCell>
                                         <TableCell>{day}</TableCell>
 
@@ -88,7 +86,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                             {
                                                 // iterates through each range of time and inputs a course if matches with time
                                                 // Also expands (spans) the course if it takes more hours
-                                                hourRanges.map((range) => {
+                                                hourRanges.map((range, index) => {
                                                     let properties = activitiesForEachHour[range]
 
                                                     let rangeIndex = -1;
@@ -102,7 +100,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                                         // 3. If outside time frame, render cell but don't show any courses
                                                         (properties?.rangeIndex <= 0) 
                                                         ? (
-                                                            <TableCell className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange??1 : 1}>
+                                                            <TableCell key={index} className="p-0" colSpan={(properties?.rangeIndex === 0) ? properties.spanRange??1 : 1}>
                                                                 {(properties?.rangeIndex === -1) 
                                                                 ? '' 
                                                                 : <Event 
@@ -121,7 +119,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                             })
                         }
                     </>
-                </TableBody>
+                </TableBody> : <p>Loading....</p>}
             </Table>
         </div>
     )

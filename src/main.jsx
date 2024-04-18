@@ -11,8 +11,12 @@ import Login from './components/login/Index'
 import Staff from './components/staff/Index'
 import AdminLayout from './components/admin/Layout'
 import AdminTimetables from './components/admin/show-timetables/Index'
+import AdminDispalyTimetable from './components/admin/show-timetables/displayTimetable'
 import AdminSettings from './components/admin/settings/Index'
 import NewTimetable from "./components/admin/new-timetable-config/Index"
+import AdminViews from "./components/admin/settings/general/Index"
+import AdminAddAi from "./components/admin/settings/aikey"
+import AdminConfigTimetables from "./components/admin/settings/timetableConfigs"
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />
   },
   {
+    path: '/admin/new-timetable',
+    element: <NewTimetable />,
+    errorElement: <ErrorPage />
+  },
+  {
     path: '/admin',
     element: <AdminLayout />, // Wrap Admin component with layout
     children: [
@@ -39,17 +48,31 @@ const router = createBrowserRouter([
         element: <AdminTimetables />
       }, // Default admin page
       { 
+        path: 'timetable', 
+        element: <AdminDispalyTimetable /> 
+      },
+      { 
         path: 'settings', 
-        element: <AdminSettings /> 
+        element: <AdminSettings />,
+        children: [
+          { 
+            index: true, 
+            element: <AdminViews />
+          }, // Default admin page
+          { 
+            path: 'add-AI-key', 
+            element: <AdminAddAi /> 
+          },
+          { 
+            path: 'configure-timetables', 
+            element: <AdminConfigTimetables /> 
+          },
+
+        ]
       },
     ],
     errorElement: <ErrorPage />
   },
-  {
-    path: '/admin/new-timetable',
-    element: <NewTimetable />,
-    errorElement: <ErrorPage />
-  }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
