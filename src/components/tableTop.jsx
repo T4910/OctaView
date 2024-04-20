@@ -23,7 +23,6 @@ const tableTop = ({mode, showVenue, level, department, departments, setLevel, se
             const response = await axios.post(`${serverLink}/department/get-department`, { code: department })
             
             // setDepartments(response?.data?.department)
-            console.log(response?.data?.department[0]?.name, 823)
             setDepartmentName(response?.data?.department[0]?.name);
 
             } catch (error) {
@@ -33,8 +32,6 @@ const tableTop = ({mode, showVenue, level, department, departments, setLevel, se
    
       fetchDepartment();
       }, [department])
-
-  console.log({mode, showVenue, level, department}, 893)
 
   const title = (!!level && !!department) ? `${level}L ${departmentName} ${mode !== 'exam' ? ' weekly ' : ' exam '} timetable` : 'Empty Timetable...'
 

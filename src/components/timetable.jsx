@@ -18,7 +18,6 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
     
     let daysOfWeek, hourRanges
 
-    console.log(startDay)
     if(!!startDay){
         console.log(startDay, 88899)
         daysOfWeek = getDaysOfWeek(startDay, endDay);

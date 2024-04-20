@@ -1,132 +1,118 @@
+import { useEffect, useState } from 'react'
 import TimeTable from '../components/timetable'
 import NavBar from "@/components/navbar"
-
-// to be fetched from backend server
-const selectedSchedule = {
-    semester: 1,
-    year: '2023/2024',
-    mode: 'classes', // or Exam
-
-    startDay: 'Monday',
-    endDay: 'Saturday',
-    lectureHours: {
-        startHour: '8:00 AM',
-        endHour: '6:00 PM'
-    },
-    departments: {
-        'Computer Science': {
-            100: {
-                monday: [
-                    {
-                      id: 1,
-                      name: "TMC 222",
-                      venue: 'LT1',
-                      event: {
-                        type: "lecture",
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T15:00:00"),
-                      endTime: new Date("2018-02-23T16:00:00"),
-                    },
-                    {
-                      id: 1,
-                      name: "CSC 222",
-                      venue: 'LT1',
-                      event: {
-                        type: "lecture",
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T11:00:00"),
-                      endTime: new Date("2018-02-23T12:00:00"),
-                    },
-                  ],
-                tuesday: [],
-                wednesday : [
-                    {
-                      id: 1,
-                      name: "CSC 212",
-                      venue: 'LT1',
-                      event: {
-                        type: "lecture",
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T13:00:00"),
-                      endTime: new Date("2018-02-23T15:00:00"),
-                    },
-                    {
-                      id: 2,
-                      name: "CSC 217",
-                      venue: 'LT1',
-                      event: {
-                        type: "lecture",
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T15:00:00"),
-                      endTime: new Date("2018-02-23T16:00:00"),
-                    },
-                  ],
-                thursday: [],
-                friday: [],
-                saturday: [],
-            },
-            200: {
-                monday: [
-                    {
-                      id: 1,
-                      name: "CSC 222",
-                      event: {
-                        type: "lecture",
-                        venue: 'LT1',
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T11:30:00"),
-                      endTime: new Date("2018-02-23T13:30:00"),
-                    },
-                  ],
-            },
-            300: {
-                monday: [
-                    {
-                      id: 1,
-                      name: "CSC 222",
-                      event: {
-                        type: "lecture",
-                        venue: 'LT1',
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T11:30:00"),
-                      endTime: new Date("2018-02-23T13:30:00"),
-                    },
-                  ],
-            },
-            400: {
-                monday: [
-                    {
-                      id: 1,
-                      name: "CSC 222",
-                      event: {
-                        type: "lecture",
-                        venue: 'LT1',
-                        coordinator: 'Mr. Shaba'
-                      },
-                      startTime: new Date("2018-02-23T11:30:00"),
-                      endTime: new Date("2018-02-23T13:30:00"),
-                    },
-                  ],
-            },
-        }
-    }
-}
+import axios from 'axios'
 
 // TODO: Fetch timetables directly from database - with pagination
 // TODO: Add a loading sign for the timetable
 // TODO: Beautify
 
+const serverLink = import.meta.env.VITE_SERVER_LINK
+
+
 export default function Root() {
-    return (
-        <div className='bg-att'>
-            <NavBar />
-            <TimeTable schedule={selectedSchedule}/>
-        </div>
-    )
+  const [ schedule, setSchedule ] = useState({});
+  
+  useEffect(() => {
+    async function fetchTimetable(){
+      console.log('fetchTimetable is working...')
+      try {
+        console.log('tryblock is working...')
+        const response = await axios.post(`${serverLink}/timetable/get-timetable`, { current: true });
+        console.log('sent message to server...')
+        // console.log('view timetable', response, 20);
+        
+        if (response?.status === 200) {
+            console.log('got a positive response...', response?.data?.timetables)
+            
+            const { 
+              schedule, academicYear, semester,
+              type, name, description,
+              timing: {startDay, endDay, startHour, endHour} 
+            } = response?.data?.timetables[0];
+            
+            console.log('broke response down...', { schedule })
+            
+            let cleanedSchedule = {}
+            schedule.forEach((timeslot) => (cleanedSchedule = {...cleanedSchedule, ...convertRawSchedule(timeslot)}));
+            
+            console.log('cleaned schedule...', { cleanedSchedule })
+            
+            const timetableData = {
+              semester,
+              year: academicYear,
+              mode: type, // or Exam
+              startDay,
+              endDay,
+              name, description,
+              lectureHours: { startHour, endHour },
+              departments: cleanedSchedule
+            };
+
+            setSchedule(timetableData)
+            console.log(response?.data, timetableData, 88888)
+                
+            } else {
+                console.log(response, 342)
+            }
+            
+        } catch (error) {
+            console.log('Error while fetching timetables...', err)
+        }
+    }
+
+    console.log('useEffect working...')
+    fetchTimetable();
+  }, [])
+
+  return (
+      <div className='bg-att'>
+          <NavBar />
+          <TimeTable schedule={schedule}/>
+      </div>
+  )
+}
+
+
+function convertRawSchedule(inputData) {
+  let output = {};
+
+  // Extracting relevant information from inputData
+  let level = inputData.level;
+  let departmentName = inputData.departmentId.code;
+  let day = inputData.day.toLowerCase();
+
+  // Creating a dictionary for the course
+  let courseInfo = {
+      code: inputData.courseId.code,
+      name: inputData.courseId.title,
+      startTime: inputData.startTime,
+      endTime: inputData.endTime,
+      event: {
+        type: inputData.event,
+        coordinator: inputData.coordinator
+      }
+  };
+
+  // Checking if department exists in the output object
+  if (!output.hasOwnProperty(departmentName)) {
+      output[departmentName] = {};
+      output[departmentName][level] = {};
+      output[departmentName][level][day] = [courseInfo];
+  } else {
+      // Checking if the level exists for the department
+      if (!output[departmentName].hasOwnProperty(level)) {
+          output[departmentName][level] = {};
+          output[departmentName][level][day] = [courseInfo];
+      } else {
+          // Checking if the day exists for the level
+          if (!output[departmentName][level].hasOwnProperty(day)) {
+              output[departmentName][level][day] = [courseInfo];
+          } else {
+              output[departmentName][level][day].push(courseInfo);
+          }
+      }
+  }
+
+  return output;
 }
