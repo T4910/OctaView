@@ -4,7 +4,7 @@ import Days from "@/components/daysSelection"
 
 const selections = ({ venue, setLevel, setDepartment }) => {
   return (
-    <div className="flex space-x-4">
+    <div className="flex md:justify-end w-full md:w-fit space-x-4 justify-start">
         { venue ? <Days /> : null}
         <Levels setLevel={setLevel}/>
         <Department 

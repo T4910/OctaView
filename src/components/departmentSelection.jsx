@@ -77,7 +77,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enableSelectA
     ? ( value === 'all') 
       ? 'All department selected' 
       : departments.find((department) => department.code === value)?.name  
-    : "Select department...";
+    : "Select a department...";
     
       return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -86,10 +86,10 @@ const departmentSelection = ({ contentClassName, triggerClassName, enableSelectA
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className={cn("w-44 justify-between", triggerClassName)}
+              className={cn("max-w-48 min-w-20 flex justify-between [&>span]:line-clamp-1", triggerClassName)}
               disabled={departments.length === 0}
             >
-              {shownValue}
+              <span style={{pointerEvents: 'none'}}>{shownValue}</span>
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
