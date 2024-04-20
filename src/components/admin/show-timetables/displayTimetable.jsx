@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from "axios"
 import { Button } from '@/components/ui/button';
-import { Rewind } from 'lucide-react';
+import { Rewind, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import Confirm from './confirmModal';
+import { deleteTimetable } from '@/lib/dbfunc';
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
@@ -82,6 +84,24 @@ export default function dispalyTimetable() {
                 Rollback
             </span>
         </Button>
+        <Confirm
+          title="Are you absolutely sure about this?"
+          description="This action cannot be undone. This will permanently delete this timetable."
+          action={deleteTimetable}
+          redirect="/admin/"
+        >
+          <Button 
+              // size="lg" 
+              className="h-10 gap-2"
+              variant="secondary"
+              disabled={(!(!!schedule?.id))}
+          >
+              <Trash2 className="size-4" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Delete
+              </span>
+          </Button>
+        </Confirm>
       </div>
       <Timetable schedule={schedule}/>
     </div>

@@ -6,7 +6,7 @@ import Options from "./timetableOption"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import {Vortex, Triangle} from 'react-loader-spinner'
-
+import { Skeleton } from "@/components/ui/skeleton"
 
 // const timetables = [1,2,3,4,5]
 const serverLink = import.meta.env.VITE_SERVER_LINK
@@ -16,10 +16,10 @@ export default function list() {
 
     useEffect(() => {
         async function fetchInitTimetables(){
-            (async () => {
-                let response = await gpt.ask("Explain variables in javascript");
-                console.log(response); // you got it!
-              })();
+            // (async () => {
+            //     let response = await gpt.ask("Explain variables in javascript");
+            //     console.log(response); // you got it!
+            //   })();
               
             try {
                 const response = await axios.post(`${serverLink}/timetable/get-timetable`, {})
@@ -27,7 +27,7 @@ export default function list() {
                 // console.log(response, 444)
                 if (response?.status === 200) {
                     
-                    const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, name, status}) => ({createdAt, type, _id, name, status}))
+                    const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, name, status, current}) => ({createdAt, type, _id, name, status, current}))
                     console.log(response, 342)
                     setTimetables(cleanedResponse);
                 } else {
@@ -44,20 +44,16 @@ export default function list() {
 
     const Loader = () => {
         return (
-            <div 
-
-                className="w-full p-5 grid place-content-center place-items-center"
-            >
-                <Triangle
-                    visible={true}
-                    height="80"
-                    width="80"
-                    color="#000000"
-                    ariaLabel="triangle-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                />
-            </div>
+            <TableBody>
+                {Array(4).fill(null).map(() => (
+                    <TableRow>
+                        {/* <TableCell className="font-medium underline" asChild colSpan={4}><Loader /></TableCell> */}
+                        <TableCell className="font-medium underline" asChild ><Skeleton className="h-8 w-36" /></TableCell>
+                        <TableCell className="font-medium underline" asChild ><Skeleton className="h-8 w-36" /></TableCell>
+                        <TableCell className="font-medium underline" asChild ><Skeleton className="h-8 w-36" /></TableCell>
+                    </TableRow>)
+                )}
+            </TableBody>
         )
     }
 
@@ -92,16 +88,10 @@ export default function list() {
                             name={details?.name}
                             status={details?.status}
                             createdAt={parsedDate}
+                            current={details?.current}
                         />})}
                 </TableBody>)
-            : <TableBody>
-                <TableRow>
-                        <TableCell className="font-medium underline" asChild colSpan={4}>
-                            <Loader />
-                        </TableCell>
-
-                </TableRow>
-            </TableBody>
+            : <Loader />
         }
         </>
     </Table>
