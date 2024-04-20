@@ -11,8 +11,8 @@ import ErrorPage from './Error-page'
 import Login from './components/login/Index'
 import Staff from './components/staff/Index'
 import AdminLayout from './components/admin/Layout'
-import AdminTimetables from './components/admin/show-timetables/Index'
-import AdminDispalyTimetable from './components/admin/show-timetables/displayTimetable'
+import AdminTimetables from './components/admin/show-timetables/index'
+import AdminDisplayTimetable from './components/admin/show-timetables/displayTimetable'
 import AdminSettings from './components/admin/settings/Index'
 import NewTimetable from "./components/admin/new-timetable-config/Index"
 import AdminViews from "./components/admin/settings/general/Index"
