@@ -11,7 +11,7 @@ import ErrorPage from './Error-page'
 import Login from './components/login/Index'
 import Staff from './components/staff/Index'
 import AdminLayout from './components/admin/Layout'
-import AdminTimetables from './components/admin/show-timetables/index'
+import AdminTimetables from './components/admin/show-timetables/Index'
 import AdminDisplayTimetable from './components/admin/show-timetables/displayTimetable'
 import AdminSettings from './components/admin/settings/Index'
 import NewTimetable from "./components/admin/new-timetable-config/Index"
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
       },
       { 
         path: 'timetable/:id', 
-        element: <AdminDispalyTimetable /> 
+        element: <AdminDisplayTimetable /> 
       },
       { 
         path: 'settings', 
