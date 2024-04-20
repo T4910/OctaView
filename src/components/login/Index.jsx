@@ -13,6 +13,10 @@ import {
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
+// TODO: Beautify
+// TODO: Add a navbar back home
+// TODO: Ensure necessary pages are protected
+
 function Login() {
     const navigate = useNavigate();
     const emailRef = useRef(null);
@@ -38,13 +42,14 @@ function Login() {
                     navigate('/faculty')
                 } else if (response.data.role === 'admin') {
                     navigate('/admin')
-                } else if (response.data.role === 'student') {
+                } else {
                     navigate('/')
                 }
             } else {
-                setError(response.data.message || response)
+                setError(response?.data?.message || response)
             }
         } catch (error) {
+            console.log(error, 9876)
             setError(error?.response?.data?.message);
         }
 

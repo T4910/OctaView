@@ -4,15 +4,15 @@ import { cn } from "@/lib/utils"
 const links = [
   { 
     href: '',
-    url: ['/admin/settings/configure-timetables', '/admin/settings/add-AI-key'],
+    url: ['/admin/settings/configure-timetables/', '/admin/settings/add-AI-key/'],
     value: 'General',
   },
   { 
-    href: 'configure-timetables',
+    href: 'configure-timetables/',
     value: 'Timetable'
   },
   { 
-    href: 'add-AI-key',
+    href: 'add-AI-key/',
     value: 'AI key',
   },
 ];
