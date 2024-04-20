@@ -9,8 +9,8 @@ import { useState } from "react"
 // TODO: add the timetable view mode that shows venues instead of days and have the day as a select 
 function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }, venue }) {
     
-    const [ level, setLevel ] = useState(100);
-    const [ department, setDepartment ] = useState('csc');
+    const [ level, setLevel ] = useState('');
+    const [ department, setDepartment ] = useState('');
    
     if(!(!!startDay)) return <p>Loading...</p>
     
@@ -24,7 +24,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
         hourRanges = getHourRanges(lectureHours.startHour, lectureHours.endHour); // returns an array of all hour ranges within the time specified
     }
 
-    console.log('Sent to timetable: ',{ startDay, endDay, lectureHours, departments, mode, venue}, '\n Other computed values:', {daysOfWeek, hourRanges})
+    console.log('Sent to timetable: ',{departments})
 
 
     const Loader = () => {
@@ -37,7 +37,12 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
 
     return (
         <div>
-            <TableTop mode={mode} venue={venue}/>            
+            <TableTop 
+                mode={mode} 
+                showVenues={venue}
+                setLevel={setLevel}
+                setDepartment={setDepartment}
+            />            
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -56,16 +61,6 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                     <>
                         {
                             daysOfWeek?.map((day, index) => {   
-                                console.log({day, 
-                                    d: (!(!!departments[department]))
-                                        ? [] 
-                                        : (!(!!departments[department][level]))
-                                           ? [] 
-                                           : (!(!!departments[department][level][day.toLowerCase()])) 
-                                              ? [] 
-                                              : (departments[department][level][day.toLowerCase()])
-                                }, 9328)
-
                                 const activitiesWithTimeRange = {}, 
                                 activitiesForEachHour = {}, 
                                 // if no details on activities for that day, replace with an empty array - []
@@ -82,7 +77,6 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                     //  [{startTime:..., endTime:..., ....}] -> {'startTime-endTime': {....}}
 
                                     const hourRange = formatHourRange(startTime, endTime);
-                                    console.log(startTime, endTime, hourRange, 776688)
                                     activitiesWithTimeRange[hourRange] = rest;
                                 })
 
@@ -108,7 +102,6 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                             }
                                         }
                                     }
-                                    console.log('DAY: ', day, 'RANGE: ', range, '\n', activitiesForEachHour[range])
                                 })
                                 
                                 

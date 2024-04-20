@@ -6,10 +6,11 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const Select = React.forwardRef(({ defaultValue, children }, ref) => ( 
+const Select = React.forwardRef(({ defaultValue, children, onValueChange }, ref) => ( 
   <SelectPrimitive.Root
     ref={ref}
     defaultValue={defaultValue}
+    onValueChange={onValueChange}
   >
     {children}
   </SelectPrimitive.Root>

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -15,8 +15,13 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
+import axios from 'axios'
+
+const serverLink = import.meta.env.VITE_SERVER_LINK
+
+
 // To be fetched from database
-const courses = [
+const department = [
   {
     value: "CSC",
     label: "Computer Science",
@@ -47,15 +52,32 @@ const courses = [
   },
 ]
 
-const courseSelection = ({ contentClassName, triggerClassName, enableSelectAll }) => { 
+const departmentSelection = ({ contentClassName, triggerClassName, enableSelectAll, setDepartment }) => { 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(enableSelectAll ? "all" : "");
+    const [departments, setDepartments] = useState([])
+
+    useEffect(() => {
+      async function fetchDepartment(){
+          try {
+            const response = await axios.post(`${serverLink}/department/get-department`, {})
+            
+            // console.log(response?.data?.deparment,776543)
+            setDepartments(response?.data?.deparment)
+
+          } catch (error) {
+            console.log('Error fetching the department...', error)
+          }
+      }
+  
+      fetchDepartment();
+    }, [])
 
     const shownValue = value 
     ? ( value === 'all') 
-      ? 'All courses selected' 
-      : courses.find((course) => course.value === value)?.label  
-    : "Select course...";
+      ? 'All department selected' 
+      : departments.find((department) => department.code === value)?.name  
+    : "Select department...";
     
       return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -65,23 +87,24 @@ const courseSelection = ({ contentClassName, triggerClassName, enableSelectAll }
               role="combobox"
               aria-expanded={open}
               className={cn("w-44 justify-between", triggerClassName)}
+              disabled={departments.length === 0}
             >
               {shownValue}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent align={'start'} className={cn("w-fit justify-between h-72", contentClassName)}>
+          <PopoverContent align={'end'} className={cn("w-fit justify-between h-72", contentClassName)}>
             <Command>
               <CommandInput placeholder="Search course..." />
               <CommandList>
-                <CommandEmpty>No course found.</CommandEmpty>
+                <CommandEmpty>No departments found.</CommandEmpty>
                 <CommandGroup>
                 { enableSelectAll ? 
                       <CommandItem
                           key='all'
                           value='all'
                           onSelect={(currentValue) => {
-                            setValue(value === 'all' ? '' : 'all');
+                            setValue(value === 'all' ? "" : 'all');
                             // setOpen(false);
                           }}
                         >
@@ -93,22 +116,24 @@ const courseSelection = ({ contentClassName, triggerClassName, enableSelectAll }
                           />
                           <span className="font-medium">{value === 'all' ? 'Deselect All' : 'Select All'}</span>
                       </CommandItem> : null}
-                    {courses.map((course) => (
+                    {departments.map((department) => (
                         <CommandItem
-                          key={course.value}
-                          value={course.value}
+                          key={department.code}
+                          value={department.code}
                           onSelect={(currentValue) => {
+                            console.log(value, currentValue)
                             setValue(currentValue === value ? "" : currentValue);
+                            setDepartment(currentValue === value ? "" : currentValue);
                             setOpen(false);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              (value === course.value || value === 'all') ? "opacity-100" : "opacity-0"
+                              (value === department.code || value === 'all') ? "opacity-100" : "opacity-0"
                             )}
                           />
-                          {course.label}
+                          <span className="capitalize">{department.name}</span>
                         </CommandItem>
                     ))}
                 </CommandGroup>
@@ -119,4 +144,4 @@ const courseSelection = ({ contentClassName, triggerClassName, enableSelectAll }
       );
     };
     
-export default courseSelection;
+export default departmentSelection;

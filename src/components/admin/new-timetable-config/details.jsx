@@ -9,14 +9,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import CourseSelection from "@/components/courseSelection"
+
+import DepartmentSelection from "@/components/departmentSelection"
 import LevelSelection from "@/components/levelSelection"
 
 
@@ -51,7 +45,7 @@ const details = () => {
                     <div className="grid gap-6 sm:grid-cols-3">
                     <div className="grid gap-3">
                         <Label htmlFor="subcategory">Courses</Label>
-                        <CourseSelection 
+                        <DepartmentSelection 
                           triggerClassName="w-56"
                           contentClassName="w-fit" 
                           enableSelectAll={true}
