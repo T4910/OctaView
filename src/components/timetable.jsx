@@ -5,6 +5,8 @@ import {
 import TableTop from "@/components/tableTop"
 import Event from "@/components/tEvents"
 import { useState } from "react"
+import {Vortex, Triangle} from 'react-loader-spinner'
+import { Skeleton } from "./ui/skeleton"
 
 // TODO: add the timetable view mode that shows venues instead of days and have the day as a select 
 function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }, venue }) {
@@ -12,11 +14,13 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
     const [ level, setLevel ] = useState('');
     const [ department, setDepartment ] = useState('');
    
-    if(!(!!startDay)) return <p>Loading...</p>
+    // if(!(!!startDay)) return <p>Loading...</p>
     
     let daysOfWeek, hourRanges
 
+    console.log(startDay)
     if(!!startDay){
+        console.log(startDay, 88899)
         daysOfWeek = getDaysOfWeek(startDay, endDay);
         // parameters are in date time format.
         //! NOTE -> datetime must be in hours only without minutes
@@ -24,22 +28,39 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
         hourRanges = getHourRanges(lectureHours.startHour, lectureHours.endHour); // returns an array of all hour ranges within the time specified
     }
 
-    console.log('Sent to timetable: ',{departments})
+    console.log('Sent to timetable: ',{departments, hourRanges})
 
 
     const Loader = () => {
         return (
-            <div>
-                <p>Loading...</p>
-            </div>
+            <TableBody>
+                <TableRow>
+                        <TableCell className="font-medium underline" asChild colSpan={11}>
+                            <div className="w-full py-16 p-8 grid place-content-center place-items-center">
+                                <Triangle
+                                    visible={true}
+                                    height="100"
+                                    width="100"
+                                    color="#000000"
+                                    ariaLabel="triangle-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClass=""
+                                />
+                            </div>
+                        </TableCell>
+                </TableRow>
+            </TableBody>
         )
     }
 
     return (
-        <div>
+        <div className="border ">
             <TableTop 
                 mode={mode} 
                 showVenues={venue}
+                level={level}
+                departments={departments??{}}
+                department={department}
                 setLevel={setLevel}
                 setDepartment={setDepartment}
             />            
@@ -52,7 +73,10 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                             {
                                 // Iterates through hour (24h formart) ranges rep. as strings 
                                 // i.e hourRanges = [..., '12-13', '13-14', ...]
-                                hourRanges.map((range, index) => <TableHead key={index} className="min-w-10">{range}</TableHead>)
+                                // console.log(hourRanges, 98238723);
+                                (!!hourRanges)
+                                    ? hourRanges?.map((range, index) => <TableHead key={index} className="min-w-10">{range}</TableHead>)
+                                    : Array(9).fill(null).map((_, index) => <TableHead key={index} className="min-w-10"><Skeleton className="w-full h-5/6 bg-slate-300 bg-opacity-30"/></TableHead>)
                             }
                         </>
                     </TableRow>
@@ -156,8 +180,8 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
 
 function getDaysOfWeek(startDay, endDay) {
     const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const startIndex = daysOfWeek.indexOf(startDay);
-    const endIndex = daysOfWeek.indexOf(endDay);
+    const startIndex = daysOfWeek?.indexOf(startDay);
+    const endIndex = daysOfWeek?.indexOf(endDay);
 
     if (startIndex === -1 || endIndex === -1) {
         console.error('Invalid start or end day specified.');
@@ -165,11 +189,11 @@ function getDaysOfWeek(startDay, endDay) {
     }
 
     if (startIndex <= endIndex) {
-        return daysOfWeek.slice(startIndex, endIndex + 1);
+        return daysOfWeek?.slice(startIndex, endIndex + 1);
     } else {
-        const firstPart = daysOfWeek.slice(startIndex);
-        const secondPart = daysOfWeek.slice(0, endIndex + 1);
-        return firstPart.concat(secondPart);
+        const firstPart = daysOfWeek?.slice(startIndex);
+        const secondPart = daysOfWeek?.slice(0, endIndex + 1);
+        return firstPart?.concat(secondPart);
     }
 }
 

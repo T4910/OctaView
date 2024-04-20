@@ -19,51 +19,18 @@ import axios from 'axios'
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
-
-// To be fetched from database
-const department = [
-  {
-    value: "CSC",
-    label: "Computer Science",
-  },
-  {
-    value: "MAT",
-    label: "Mathematics",
-  },
-  {
-    value: "POS",
-    label: "Political Science",
-  },
-  {
-    value: "EIE",
-    label: "Electrical & Information Engineering",
-  },
-  {
-    value: "MCE",
-    label: "Mechanical Engineering",
-  },
-  {
-    value: "MTE",
-    label: "Mechatronics Engineering",
-  },
-  {
-    value: "BUS",
-    label: "Business Studies",
-  },
-]
-
-const departmentSelection = ({ contentClassName, triggerClassName, enableSelectAll, setDepartment }) => { 
+const departmentSelection = ({ contentClassName, triggerClassName, enabled, enableSelectAll, setDepartment }) => { 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(enableSelectAll ? "all" : "");
     const [departments, setDepartments] = useState([])
+    // Find a way to fix this logic so that department is disabled when everything else is loading ----> console.log(((departments?.length === 0) && (!enabled)), departments?.length === 0, !enabled, 8398238)
 
     useEffect(() => {
       async function fetchDepartment(){
           try {
             const response = await axios.post(`${serverLink}/department/get-department`, {})
             
-            // console.log(response?.data?.deparment,776543)
-            setDepartments(response?.data?.deparment)
+            setDepartments(response?.data?.department)
 
           } catch (error) {
             console.log('Error fetching the department...', error)
@@ -76,7 +43,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enableSelectA
     const shownValue = value 
     ? ( value === 'all') 
       ? 'All department selected' 
-      : departments.find((department) => department.code === value)?.name  
+      : departments?.find((department) => department.code === value)?.name  
     : "Select a department...";
     
       return (
@@ -87,7 +54,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enableSelectA
               role="combobox"
               aria-expanded={open}
               className={cn("max-w-48 min-w-20 flex justify-between [&>span]:line-clamp-1", triggerClassName)}
-              disabled={departments.length === 0}
+              disabled={(departments?.length === 0)}
             >
               <span style={{pointerEvents: 'none'}}>{shownValue}</span>
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -116,7 +83,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enableSelectA
                           />
                           <span className="font-medium">{value === 'all' ? 'Deselect All' : 'Select All'}</span>
                       </CommandItem> : null}
-                    {departments.map((department) => (
+                    {departments?.map((department) => (
                         <CommandItem
                           key={department.code}
                           value={department.code}

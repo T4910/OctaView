@@ -2,12 +2,15 @@ import Timetable from '../../timetable'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from "axios"
+import { Button } from '@/components/ui/button';
+import { Rewind } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
 export default function dispalyTimetable() {
   const { id } = useParams();
-  const [ schedule, setSchedule ] = useState({startDay: null})    
+  const [ schedule, setSchedule ] = useState({})    
 
   useEffect(() => {
     async function fetchTimetable(){
@@ -16,7 +19,7 @@ export default function dispalyTimetable() {
           if (response?.status === 200) {
             
             const { 
-              schedule, academicYear, semester,
+              _id, schedule, academicYear, semester,
               type, name, description,
               timing: {startDay, endDay, startHour, endHour} 
             } = response?.data?.timetables;
@@ -26,18 +29,17 @@ export default function dispalyTimetable() {
             
             
             const timetableData = {
-              semester,
+              id: _id, semester, startDay, 
+              endDay, name, description,
               year: academicYear,
               mode: type, // or Exam
-              startDay,
-              endDay,
-              name, description,
               lectureHours: { startHour, endHour },
               departments: cleanedSchedule
             };
 
+            console.log(response, timetableData, 78645)
             setSchedule(timetableData)
-            console.log(response?.data, timetableData, 88888)
+            // console.log(response?.data, timetableData, 88888)
                 
             } else {
                 console.log(response, 342)
@@ -52,12 +54,34 @@ export default function dispalyTimetable() {
   }, [])
 
   return (
-    <div className='mt-10 mx-12 md:via-slate-50 lg:via-white'>
-      <div className="mx-auto grid w-full max-w-6xl gap-1">
-          <h1 className="text-2xl font-semibold">{schedule?.name??'Timetabale Name'}</h1>
-          <div>
-              <p className='font-medium text-sm text-muted-foreground'>{schedule?.description??'Timetable Description'}</p>
-          </div>
+    <div className='mt-6 mx-8 md:via-slate-50 lg:via-white space-y-6'>
+      <div className='flex justify-between items-center space-x-3'>
+        <div className="mx-auto grid w-full max-w-6xl gap-1">
+            <h1 className="text-2xl font-semibold">
+              {(!!schedule?.name)
+              ? (schedule?.name??'Timetable Name')
+              : <Skeleton className="max-w-64 h-8"/>}
+            </h1>
+            <div>
+                <p className='font-medium text-sm text-muted-foreground'>
+                {(!!schedule?.description)
+                  ? (schedule?.description??'Timetable Name')
+                  : <Skeleton className="w-52 h-5"/>}
+                </p>
+            </div>
+        </div>
+        <Button 
+            // size="lg" 
+            className="h-10 gap-2"
+            variant="secondary"
+            disabled={(!(!!schedule?.id))}
+            onClick={() => rollback(schedule?.id)}
+        >
+            <Rewind className="size-4" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Rollback
+            </span>
+        </Button>
       </div>
       <Timetable schedule={schedule}/>
     </div>
@@ -105,4 +129,8 @@ function convertRawSchedule(inputData) {
     }
 
     return output;
+}
+
+function rollback(id){
+  console.log('Timetable ID: ', id)
 }

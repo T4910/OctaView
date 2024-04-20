@@ -27,8 +27,8 @@ export default function list() {
                 // console.log(response, 444)
                 if (response?.status === 200) {
                     
-                    const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, }) => ({createdAt, type, _id, }))
-                    // console.log(cleanedResponse, 342)
+                    const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, name, status}) => ({createdAt, type, _id, name, status}))
+                    console.log(response, 342)
                     setTimetables(cleanedResponse);
                 } else {
                     console.log(response, 342)
