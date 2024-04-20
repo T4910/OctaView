@@ -5,7 +5,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import Search from '@/components/admin/searchBox'
 import NewTimetable from '@/components/admin/newTimetable'
 import { cn } from "@/lib/utils"
@@ -69,35 +69,20 @@ const navbar = () => {
                 className="flex items-center gap-2 text-lg font-semibold"
               >
                 <Package2 className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
+                <span className="sr-only">Octagon</span>
               </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </Link>
-              <Link href="#" className="hover:text-foreground">
-                Settings
-              </Link>
+              {
+                links.map(({ href, value, disabled, url }, index) => <SheetClose asChild><Link
+                  to={`/admin/${href}`}
+                  key={index}
+                  children={value}
+                  className={cn(
+                    "text-muted-foreground hover:text-foreground",
+                    ((!!location.pathname.includes(href) && href !== '') || url?.includes(location.pathname)) && 'text-foreground',
+                    disabled && 'opacity-50 hover:text-muted-foreground'
+                  )}
+                /></SheetClose>)
+              }
             </nav>
           </SheetContent>
         </Sheet>

@@ -21,7 +21,7 @@ export default function Component() {
   const location = useLocation();
 
   return (
-    <nav className="flex flex-col gap-4 text-sm text-muted-foreground p-8 px-10">
+    <nav className="flex md:flex-col gap-4 text-sm text-muted-foreground p-5 pb-7 md:p-8 px-8">
           {
             links.map(({ href, value, url }, index) => <Link
               to={`/admin/settings/${href}`}
