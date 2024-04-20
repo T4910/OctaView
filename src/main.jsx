@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
-  RouterProvider
+  RouterProvider,
+  Navigate
 } from 'react-router-dom'
 import './index.css'
 import Root from './routes/root'
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       }, // Default admin page
       { 
         path: 'timetable', 
+        element:  <Navigate to="/admin/" replace />
+      },
+      { 
+        path: 'timetable/:id', 
         element: <AdminDispalyTimetable /> 
       },
       { 

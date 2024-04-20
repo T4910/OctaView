@@ -1,11 +1,11 @@
 import {
-    Table, TableBody,
+    Table, TableBody, TableCell,
     TableHead, TableHeader, TableRow,
 } from "@/components/ui/table"
 import Options from "./timetableOption"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import details from "../new-timetable-config/details"
+import {Vortex, Triangle} from 'react-loader-spinner'
 
 
 // const timetables = [1,2,3,4,5]
@@ -16,13 +16,15 @@ export default function list() {
 
     useEffect(() => {
         async function fetchInitTimetables(){
+            (async () => {
+                let response = await gpt.ask("Explain variables in javascript");
+                console.log(response); // you got it!
+              })();
+              
             try {
-                const response = await axios.get(`${serverLink}/timetable/get-timetable`, {
-                    level: 100,
-                    department: 'Computer Science'
-                })
+                const response = await axios.post(`${serverLink}/timetable/get-timetable`, {})
 
-                console.log(response)
+                // console.log(response, 444)
                 if (response?.status === 200) {
                     
                     const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, }) => ({createdAt, type, _id, }))
@@ -41,7 +43,22 @@ export default function list() {
     }, [])
 
     const Loader = () => {
-        return <p>Loading...</p>
+        return (
+            <div 
+
+                className="w-full p-5 grid place-content-center place-items-center"
+            >
+                <Triangle
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="#000000"
+                    ariaLabel="triangle-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />
+            </div>
+        )
     }
 
   return (
@@ -77,7 +94,14 @@ export default function list() {
                             createdAt={parsedDate}
                         />})}
                 </TableBody>)
-            : <Loader />
+            : <TableBody>
+                <TableRow>
+                        <TableCell className="font-medium underline" asChild colSpan={4}>
+                            <Loader />
+                        </TableCell>
+
+                </TableRow>
+            </TableBody>
         }
         </>
     </Table>

@@ -118,6 +118,10 @@ const selectedSchedule = {
     }
 }
 
+// TODO: Fetch timetables directly from database - with pagination
+// TODO: Add a loading sign for the timetable
+// TODO: Beautify
+
 export default function Root() {
     return (
         <div className='bg-att'>

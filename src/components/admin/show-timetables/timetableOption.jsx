@@ -7,11 +7,11 @@ import { ExternalLink } from "lucide-react"
   
 
 export default function timetableOption({id, status, createdAt, name}) {
-    console.log({id, name, createdAt})
+    // console.log({id, name, createdAt})
   return (
     <TableRow>
         <TableCell className="font-medium underline" asChild>
-            <Link to={`/timetable?=${id}`??'#'} className="flex items-center space-x-0.5">
+            <Link to={`/admin/timetable/${id}`??'#'} className="flex items-center space-x-0.5">
                 <span>{name??'Lorem ...'}</span>
                 <ExternalLink className="size-3"/>
             </Link>
