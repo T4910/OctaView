@@ -72,7 +72,7 @@ const navbar = () => {
                 <span className="sr-only">Octagon</span>
               </Link>
               {
-                links.map(({ href, value, disabled, url }, index) => <SheetClose asChild><Link
+                links.map(({ href, value, disabled, url }, index) => <SheetClose key={index} asChild><Link
                   to={`/admin/${href}`}
                   key={index}
                   children={value}

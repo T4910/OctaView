@@ -29,9 +29,7 @@ export default function actions(id) {
                     action={() => makeCurrent(id)}
                     refresh={true}
                 >
-                    <DropdownMenuItem   
-                        onSelect={(e) => e.preventDefault()}
-                    >
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                         Rollback
                     </DropdownMenuItem>
                 </Confirm>

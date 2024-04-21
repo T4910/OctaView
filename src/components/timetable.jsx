@@ -8,7 +8,6 @@ import { useState } from "react"
 import {Vortex, Triangle} from 'react-loader-spinner'
 import { Skeleton } from "./ui/skeleton"
 
-// TODO: add the timetable view mode that shows venues instead of days and have the day as a select 
 function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }, venue }) {
     
     const [ level, setLevel ] = useState('');

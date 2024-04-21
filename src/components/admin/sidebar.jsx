@@ -21,15 +21,17 @@ export default function Component() {
   const location = useLocation();
 
   return (
-    <nav className="flex md:flex-col gap-4 text-sm text-muted-foreground p-5 pb-7 md:p-8 px-8">
-          {
-            links.map(({ href, value, url }, index) => <Link
-              to={`/admin/settings/${href}`}
-              key={index}
-              children={value}
-              className={cn("", ((!!location.pathname.includes(href) && href !== '') || url?.includes(location.pathname)) && 'font-semibold text-primary')}
-            />)
-          }
+    <nav className="text-sm text-muted-foreground p-5 pb-7 md:p-8 px-8">
+          <div className="sticky top-24 flex md:flex-col gap-4 ">
+            {
+              links.map(({ href, value, url }, index) => <Link
+                to={`/admin/settings/${href}`}
+                key={index}
+                children={value}
+                className={cn("", ((!!location.pathname.includes(href) && href !== '') || url?.includes(location.pathname)) && 'font-semibold text-primary')}
+              />)
+            }
+          </div>
     </nav>
   );
 };

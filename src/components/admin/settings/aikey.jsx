@@ -38,7 +38,7 @@ export default function Component() {
               htmlFor="include"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              You're giving us permission to use your OpenAI key to generate timetables for you
+              Permission to use OpenAI key entered to generate timetables for you
             </label>
           </div>
         </form>
