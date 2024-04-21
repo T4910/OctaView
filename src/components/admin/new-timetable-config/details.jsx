@@ -12,28 +12,34 @@ import { Label } from "@/components/ui/label"
 
 import DepartmentSelection from "@/components/departmentSelection"
 import LevelSelection from "@/components/levelSelection"
+import Create from "@/components/admin/new-timetable-config/createTimetableBtn"
+import { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
 
 
 
+const details = ({ setSchedule }) => {
+  const nameRef = useRef(null)
+  const descriptionRef = useRef(null)
 
-const details = () => {
+
   return (
         <Card>
           <CardHeader>
-            {/* <CardTitle>Store Name</CardTitle>
-            <CardDescription>
-              Used to identify your store in the marketplace.
-            </CardDescription> */}
           </CardHeader>
           <CardContent>
             <form className="space-y-6">
               <div>
                 <Label htmlFor="name">Name</Label>
-                <Input placeholder="Timetable Name" name="name"/>
+                <Input 
+                  required 
+                  ref={nameRef}
+                  placeholder="Timetable Name" 
+                  name="name"/>
               </div>
               <div>
                 <Label htmlFor="Description">Description</Label>
-                <Input placeholder="Timetable Description" name="description"/>
+                <Input required ref={descriptionRef} placeholder="Timetable Description" name="description"/>
               </div>
                 <Card>
                 <CardHeader>
@@ -62,7 +68,10 @@ const details = () => {
 
           </CardContent>
           <CardFooter className="border-t px-6 py-4">
-            <Button>Create</Button>
+            <Create setSchedule={setSchedule} details={{
+              name: nameRef?.current?.value,
+              description: descriptionRef?.current?.value
+            }}/>
           </CardFooter>
         </Card>
       )
