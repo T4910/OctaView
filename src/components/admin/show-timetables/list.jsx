@@ -15,12 +15,7 @@ export default function list() {
     const [ timetables, setTimetables ] = useState([])
 
     useEffect(() => {
-        async function fetchInitTimetables(){
-            // (async () => {
-            //     let response = await gpt.ask("Explain variables in javascript");
-            //     console.log(response); // you got it!
-            //   })();
-              
+        async function fetchInitTimetables(){             
             try {
                 const response = await axios.post(`${serverLink}/timetable/get-timetable`, {})
 
