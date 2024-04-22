@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
+import { Tooltip } from "@/components/ui/tooltip"
 import { useState } from "react"
 
 export default function Component() {
@@ -20,13 +21,14 @@ export default function Component() {
       <CardHeader>
         <CardTitle>AI Plugin</CardTitle>
         <CardDescription>
-          Add your own OpenAi api key for better quality generated timetables.
+          Add your own OpenAI api key for better quality generated timetables.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-4">
           <Input 
-            placeholder="Enter OpenAI key..." 
+            placeholder="Enter OpenAI key... (Coming Soon!!!)" 
+            disabled={true}
             value={key} 
             onChange={({target: {value}}) => {
               setKey(value);

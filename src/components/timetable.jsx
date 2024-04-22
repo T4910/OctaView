@@ -19,14 +19,14 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
 
     if(!!startDay){
         console.log(startDay, 88899)
-        daysOfWeek = getDaysOfWeek(startDay, endDay);
+        daysOfWeek = getDaysOfWeek(startDay.toLowerCase(), endDay.toLowerCase());
         // parameters are in date time format.
         //! NOTE -> datetime must be in hours only without minutes
         //! i.e "2018-02-23T13:00:00" NOT "2018-02-23T13:30:00"
         hourRanges = getHourRanges(lectureHours.startHour, lectureHours.endHour); // returns an array of all hour ranges within the time specified
     }
 
-    console.log('Sent to timetable: ',{departments, hourRanges})
+    console.log('Sent to timetable: ',{departments, hourRanges, daysOfWeek})
 
 
     const Loader = () => {
@@ -102,6 +102,7 @@ function Index({ schedule: { startDay, endDay, lectureHours, departments, mode }
                                     activitiesWithTimeRange[hourRange] = rest;
                                 })
 
+                                console.log(activitiesWithTimeRange, activities, 8938)
                                 // Start with iterating through all hour ranges and checks 
                                 // with each hour range in activities of the day, then sends the
                                 // results to another object which holds every hour range which

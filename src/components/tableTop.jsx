@@ -9,12 +9,6 @@ const serverLink = import.meta.env.VITE_SERVER_LINK
 
 
 const tableTop = ({mode, showVenue, level, department, departments, setLevel, setDepartment}) => {
-   // const currentSelection = ((!(!!departments[department]))
-   //                            ? [] 
-   //                            : (!(!!departments[department][level]))
-   //                               ? [] 
-   //                               : (departments[department][level]))
-
    const [ departmentName, setDepartmentName ] = useState("")
 
    useEffect(() => {

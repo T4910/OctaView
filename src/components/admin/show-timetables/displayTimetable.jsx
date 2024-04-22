@@ -22,7 +22,7 @@ export default function dispalyTimetable() {
             
             const { 
               _id, schedule, academicYear, semester,
-              type, name, description,
+              type, name, description, current,
               timing: {startDay, endDay, startHour, endHour} 
             } = response?.data?.timetables;
 
@@ -32,7 +32,7 @@ export default function dispalyTimetable() {
             
             const timetableData = {
               id: _id, semester, startDay, 
-              endDay, name, description,
+              endDay, name, description, current,
               year: academicYear,
               mode: type, // or Exam
               lectureHours: { startHour, endHour },
@@ -72,21 +72,27 @@ export default function dispalyTimetable() {
                 </p>
             </div>
         </div>
-        <Button 
-            // size="lg" 
-            className="h-10 gap-2"
-            variant="secondary"
-            disabled={(!(!!schedule?.id))}
-            onClick={() => rollback(schedule?.id)}
+        {(schedule?.current??true) ? null : <Confirm
+              title={`Rollback to Timetable ID: ${schedule?.id}`}
+              description={`This will make selected timetable current.`}
+              action={() => makeCurrent(id)}
+              refresh={true}
         >
-            <Rewind className="size-4" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Rollback
-            </span>
-        </Button>
+          <Button 
+              // size="lg" 
+              className="h-10 gap-2"
+              variant="secondary"
+              disabled={(!(!!schedule?.id))}
+          >
+              <Rewind className="size-4" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Rollback
+              </span>
+          </Button>
+        </Confirm>}
         <Confirm
-          title="Are you absolutely sure about this?"
-          description="This action cannot be undone. This will permanently delete this timetable."
+            title={`Delete Timetable ID: ${schedule?.id}`}
+            description="This action cannot be undone. This will permanently delete this timetable."
           action={deleteTimetable}
           redirect="/admin/"
         >
@@ -149,8 +155,4 @@ function convertRawSchedule(inputData) {
     }
 
     return output;
-}
-
-function rollback(id){
-  console.log('Timetable ID: ', id)
 }
