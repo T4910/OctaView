@@ -95,27 +95,27 @@ const data = [
   },
   {
     id: "3u1reuv4",
-    code: 242,
-    title: "success",
-    department: "Abe45@gmail.com",
+    code: 'CSC 224',
+    title: "Database",
+    department: "Computer Science",
   },
   {
     id: "derv1ws0",
-    code: 837,
-    title: "processing",
-    department: "Monserrat44@gmail.com",
+    code: 'CSC 221',
+    title: "OOP C#",
+    department: "Computer Science",
   },
   {
     id: "5kma53ae",
-    code: 874,
-    title: "success",
-    department: "Silas22@gmail.com",
+    code: 'MOS 221',
+    title: "Microsoft Office",
+    department: "Mathematics",
   },
   {
     id: "bhqecj4p",
-    code: 721,
-    title: "failed",
-    department: "carmella@hotmail.com",
+    code: 'GST 221',
+    title: "Peace & Conflict",
+    department: "University Wide",
   },
 ]
 
@@ -208,14 +208,14 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
               Copy payment ID
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Update courses</DropdownMenuItem>
+            <DropdownMenuItem>Delete courses</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
