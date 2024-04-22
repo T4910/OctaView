@@ -1,22 +1,41 @@
-import { Button } from "@/components/ui/button"
-import { PlusCircle } from "lucide-react"
-import { Link } from "react-router-dom"
-
+import Add from './addRecordModal'
+import { Input } from "@/components/ui/input"
+import { Label } from '@/components/ui/label'
 
 const newRecord = ({ name }) => {
+  const formToShow = {
+    courses: courseForm(),
+    departments: departmentForm()
+  };
+
+  if(!(!!formToShow)) return null;
+
   return (
-    <Link to="/admin/new-timetable">
-        <Button 
-            // size="lg" 
-            className="h-10 gap-2"
-            variant="outline"
-        >
-            <PlusCircle className="size-4" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                New {name}
-            </span>
-        </Button>
-    </Link>
-  )
+      <Add 
+        name={name}
+        title={`Add the following to ${name}`}
+      >
+        <form action="">{formToShow[name]}</form>
+      </Add>
+  );
 }
-export default newRecord
+
+const courseForm = () => {
+  return (
+    <div>
+      <Label htmlFor="name">Course Name</Label>
+      <Input type="text" name="name"/>
+    </div>
+  );
+};
+
+const departmentForm = () => {
+  return (
+    <div>
+      <Label htmlFor="name">Department Name</Label>
+      <Input type="text" name="name"/>
+    </div>
+  );
+};
+
+export default newRecord;
