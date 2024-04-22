@@ -157,7 +157,7 @@ async function convertToCleanSchedule(input) {
             });
         }
     } catch (e) {
-        consle.log('Error from parsing gpt response', e)
+        console.log('Error from parsing gpt response', e)
         return {}
     }
 

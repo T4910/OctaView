@@ -31,39 +31,91 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectGroup,
+  SelectValue,
+} from "@/components/ui/select"
 
 
+const views = [
+  'Courses', 'Departments'
+]
+
+// const courses = [
+//   {
+//     'id': '0001',
+//     'code': 'AGS1',
+//     'title': 'AGS',
+//   },
+//   {
+//     'id': '0002',
+//     'code': 'AGS2',
+//     'title': 'AGS',
+//   },
+//   {
+//     'id': '0003',
+//     'code': 'AGS3',
+//     'title': 'AGS',
+//   },
+// ]
+
+// const department = [
+//   {
+//     'id': '0001',
+//     'code': 'IUY1',
+//     'title': 'IUY',
+//   },
+//   {
+//     'id': '0002',
+//     'code': 'IUY2',
+//     'title': 'IUY',
+//   },
+//   {
+//     'id': '0003',
+//     'code': 'IUY3',
+//     'title': 'IUY',
+//   },
+// ]
+
+// const fetchDoc = (items) => views2.map((item) => {
+//   // Assuming each item is an object with a 'text' property
+//   // console.log(item.courses.text)
+// });
 
 const data = [
   {
     id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    code: 'CSC 222',
+    title: "Computer Hardware",
+    department: "Computer Science",
   },
   {
     id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    code: 242,
+    title: "success",
+    department: "Abe45@gmail.com",
   },
   {
     id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
+    code: 837,
+    title: "processing",
+    department: "Monserrat44@gmail.com",
   },
   {
     id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
+    code: 874,
+    title: "success",
+    department: "Silas22@gmail.com",
   },
   {
     id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
+    code: 721,
+    title: "failed",
+    department: "carmella@hotmail.com",
   },
 ]
 
@@ -91,41 +143,54 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "title",
+    header: "Title",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("title")}</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "department",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Department
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("department")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
+    // accessorKey: "code",
+    // header: () => <div className="text-right">code</div>,
+    // cell: ({ row }) => {
+    //   const code = parseFloat(row.getValue("code"))
 
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
+    //   // Format the code as a dollar code
+    //   const formatted = new Intl.NumberFormat("en-US", {
+    //     style: "currency",
+    //     currency: "USD",
+    //   }).format(code)
 
-      return <div className="text-right font-medium">{formatted}</div>
+    //   return <div className="text-right font-medium">{formatted}</div>
+    // },
+    accessorKey: "code",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Course Code
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
     },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("code")}</div>,
   },
   {
     id: "actions",
@@ -158,11 +223,8 @@ export const columns = [
   },
 ]
 
-const views = [
-  'courses', 'departments', 'users'
-]
-
 export default function DataTableDemo() {
+  const [select, setSelect] = React.useState('Courses')
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState(
     []
@@ -190,42 +252,51 @@ export default function DataTableDemo() {
     },
   })
 
+  // console.log('ain slecet', select)
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue()) ?? ""}
+          placeholder={`Filter ${select}...`}
+          value={(table.getColumn("department")?.getFilterValue()) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("department")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Select record... <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {views
-              .map((items, index) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={index}
-                    className="capitalize"
-                    // checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      // column.toggleVisibility(!!value)
-                      console.log(value)
-                    }
-                  >
-                    {items}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Select
+          value={select}
+          onValueChange={setSelect}
+
+        >
+          <SelectTrigger className="">
+            <SelectValue
+              className="capitalize"
+              placeholder="Select a record..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {views
+                .map((items, index) => {
+                  return (
+                    <SelectItem
+                      key={index}
+                      className="capitalize"
+                      value={items}
+                    >
+                      {items}
+                    </SelectItem>
+                  )
+                })}
+              {/* <SelectItem value="apple">Apple</SelectItem>
+              <SelectItem value="banana">Banana</SelectItem>
+              <SelectItem value="blueberry">Blueberry</SelectItem>
+              <SelectItem value="grapes">Grapes</SelectItem>
+              <SelectItem value="pineapple">Pineapple</SelectItem> */}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -264,9 +335,9 @@ export default function DataTableDemo() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
