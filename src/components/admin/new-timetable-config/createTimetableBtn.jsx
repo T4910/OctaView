@@ -115,11 +115,11 @@ async function askGPT({ courses, departments, venues, startTime, endTime, interv
         
         [
         {
-         course: 'the name of the course given',
-         day: 'the day of the week'
-         startTime: 'what time the course should begin in date format - javascript'
-         endTime: 'what time the course should end in date format - javascript'
-         venue: 'what venue are you allocating to the course'
+         course: the name of the course given,
+         day: the day of the week
+         startTime: what time the course should begin. Return ina JavaScript date string format
+         endTime: what time the course should end. Return ina JavaScript date string format
+         venue: what venue are you allocating to the course
         }
         ... 
         ]

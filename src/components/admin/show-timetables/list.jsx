@@ -24,6 +24,7 @@ export default function list() {
                     
                     const cleanedResponse = response?.data?.timetables?.map(({createdAt, type, _id, name, status, current}) => ({createdAt, type, _id, name, status, current}))
                     console.log(response, 342)
+                    if(cleanedResponse.length === 0) return setTimetables('');
                     setTimetables(cleanedResponse);
                 } else {
                     console.log(response, 342)
@@ -51,6 +52,8 @@ export default function list() {
             </TableBody>
         )
     }
+
+    if(timetables === '') return <p>No timetables found. Try creating one using our AI</p>
 
   return (
     <Table>
