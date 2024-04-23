@@ -22,7 +22,7 @@ export default function timetableOption({id, status, createdAt, name, current}) 
         </TableCell>
         <TableCell className="hidden md:table-cell">{createdAt}</TableCell>
         <TableCell>
-            <Actions id={id}/>
+            <Actions id={id} current={current}/>
         </TableCell>
     </TableRow>
   )

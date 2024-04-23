@@ -19,14 +19,15 @@ import axios from 'axios'
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
-const departmentSelection = ({ contentClassName, triggerClassName, enabled, enableSelectAll, setDepartment }) => { 
+const departmentSelection = ({ contentClassName, triggerClassName, enabled, enableSelectAll, setDepartment, outsideValueState, outsideDepartmentsState }) => { 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(enableSelectAll ? "all" : "");
-    const [departments, setDepartments] = useState([])
+    const [value, setValue] = outsideValueState??useState(enableSelectAll ? "all" : "");
+    const [departments, setDepartments] = outsideDepartmentsState??useState([])
     // Find a way to fix this logic so that department is disabled when everything else is loading ----> console.log(((departments?.length === 0) && (!enabled)), departments?.length === 0, !enabled, 8398238)
 
     useEffect(() => {
       async function fetchDepartment(){
+        console.log('ftetchin...')
           try {
             const response = await axios.post(`${serverLink}/department/get-department`, {})
             
@@ -37,7 +38,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enabled, enab
           }
       }
   
-      fetchDepartment();
+      (departments.length === 0) && fetchDepartment();
     }, [])
 
     const shownValue = value 
@@ -54,7 +55,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enabled, enab
               role="combobox"
               aria-expanded={open}
               className={cn("max-w-48 min-w-20 flex justify-between [&>span]:line-clamp-1", triggerClassName)}
-              disabled={(departments?.length === 0)}
+              // disabled={(departments?.length === 0)}
             >
               <span style={{pointerEvents: 'none'}}>{shownValue}</span>
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -83,7 +84,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enabled, enab
                           />
                           <span className="font-medium">{value === 'all' ? 'Deselect All' : 'Select All'}</span>
                       </CommandItem> : null}
-                    {departments?.map((department) => (
+                      {(departments?.length === 0) ? 'Loading...' : departments?.map((department) => (
                         <CommandItem
                           key={department.code}
                           value={department.code}

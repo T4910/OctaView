@@ -67,9 +67,9 @@ export default function defaults() {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>                
-                </div>
+                    </div>
                 <div className="!mt-6">
-                    <Switch defaultChecked={true} label="Set current to True for every latest timetable you make"/>
+                    <Switch defaultChecked={true} label="Set to Current"/>
                 </div>
                 </CardContent>
                 <CardFooter className="border-t px-6 py-4 ">

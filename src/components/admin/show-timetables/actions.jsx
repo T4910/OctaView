@@ -10,7 +10,8 @@ import Confirm from './confirmModal';
 import { deleteTimetable, makeCurrent } from '@/lib/dbfunc';
 
 
-export default function actions(id) {
+export default function actions({id, current}) {
+    console.log(id, current, 223)
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -23,21 +24,21 @@ export default function actions(id) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem disabled={true}>Merge</DropdownMenuItem>
-                <Confirm
-                    title="Are you absolutely sure about this?"
-                    description="This will rollback the current timetable to this selected one."
+                {current ? null : <Confirm
+                    title={`Rollback to Timetable ID: ${id}`}
+                    description={`This will make selected timetable current.`}
                     action={() => makeCurrent(id)}
                     refresh={true}
                 >
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                         Rollback
                     </DropdownMenuItem>
-                </Confirm>
+                </Confirm>}
                 <Confirm
-                    title="Are you absolutely sure about this?"
+                    title={`Delete Timetable ID: ${id}`}
                     description="This action cannot be undone. This will permanently delete this timetable."
-                    action={() => deleteTimetable(id)}
-                    refresh={true}
+                    action={deleteTimetable}
+                    redirect="/admin/"
                 >
                     <DropdownMenuItem   
                         onSelect={(e) => e.preventDefault()}

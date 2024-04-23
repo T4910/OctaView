@@ -1,5 +1,4 @@
-"use client"
-
+import { Input } from "@/components/ui/input"
 import * as React from "react"
 import {
   flexRender,
@@ -22,7 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -31,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import AddRecord from "./addNewRecords"
 import {
   Select,
   SelectContent,
@@ -405,7 +404,7 @@ export default function DataTableDemo() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex justify-between items-center py-4">
         <Input
           placeholder={`Filter ${select}...`}
           value={(table.getColumn(select === 'Courses' ? "title" : "name")?.getFilterValue()) ?? ""}
@@ -414,7 +413,9 @@ export default function DataTableDemo() {
           }
           className="max-w-sm"
         />
-        <Select
+        <div className="flex space-x-4">
+          <AddRecord name="courses" />
+          <Select
           value={select}
           onValueChange={setSelect}
         >
@@ -445,6 +446,7 @@ export default function DataTableDemo() {
             </SelectGroup>
           </SelectContent>
         </Select>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

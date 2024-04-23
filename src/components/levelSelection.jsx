@@ -5,15 +5,17 @@ import {
 import { cn } from "@/lib/utils"
 
 
-const levelSelection = ({ className, enabled, enableSelectAll, setLevel }) => {
+const levelSelection = ({ className, enabled, enableSelectAll, value, setLevel }) => {
+  console.log('levelselect:', enabled)
   return (
     <Select 
       defaultValue={enableSelectAll ? "all" : ""}
+      value={value}
       onValueChange={(level) => setLevel(level)}  
     >
         <SelectTrigger 
           className={cn("w-44 justify-between", className)} 
-          disabled={!enabled}
+          // disabled={!(!!enabled)}
         >
             <SelectValue placeholder="Select a level" />
         </SelectTrigger>
