@@ -38,7 +38,9 @@ import {
   SelectGroup,
   SelectValue,
 } from "@/components/ui/select"
+import axios from 'axios'
 
+const serverLink = import.meta.env.VITE_SERVER_LINK
 
 const views = [ 'Courses', 'Departments' ]
 
@@ -83,71 +85,85 @@ const views = [ 'Courses', 'Departments' ]
 //   // console.log(item.courses.text)
 // });
 
-const coursesData = [
-  {
-    id: "m5gr84i9",
-    code: 'CSC 222',
-    title: "Computer Hardware",
-    department: "Computer Science",
-  },
-  {
-    id: "3u1reuv4",
-    code: 'CSC 224',
-    title: "Database",
-    department: "Computer Science",
-  },
-  {
-    id: "derv1ws0",
-    code: 'CSC 221',
-    title: "OOP C#",
-    department: "Computer Science",
-  },
-  {
-    id: "5kma53ae",
-    code: 'MOS 221',
-    title: "Microsoft Office",
-    department: "Mathematics",
-  },
-  {
-    id: "bhqecj4p",
-    code: 'GST 221',
-    title: "Peace & Conflict",
-    department: "University Wide",
-  },
-]
+const cresponse = await axios.post(`${serverLink}/course/get-course`, {})
+const dresponse = await axios.post(`${serverLink}/department/get-department`, {})
+const vresponse = await axios.post(`${serverLink}/venue/get-venue`, {})
 
-const departmentsData = [
-  {
-    id: "m5gr84i9",
-    years: 4,
-    name: "Computer Science",
-    code: 'CSC',
-  },
-  {
-    id: "3u1reuv4",
-    years: 4,
-    name: "Mathematics",
-    code: "MAT",
-  },
-  {
-    id: "derv1ws0",
-    years: 5,
-    name: "Electrical Engineering",
-    code: "EIE",
-  },
-  {
-    id: "5kma53ae",
-    years: 4,
-    name: "Mass Communication",
-    code: "MCM",
-  },
-  {
-    id: "bhqecj4p",
-    years: 4,
-    name: "International Relations",
-    code: "IRL",
-  },
-]
+let viewsGotten = {
+  coursesData: parseCourses(cresponse?.data?.courses),
+  departmentsData: parseDepartments(dresponse?.data?.department),
+  venuesData: vresponse?.data?.venue,
+}
+
+
+
+const coursesData = viewsGotten?.coursesData??[]
+const departmentsData = viewsGotten?.departmentsData??[]
+// const coursesData = [
+//   {
+//     id: "m5gr84i9",
+//     code: 'CSC 222',
+//     title: "Computer Hardware",
+//     department: "Computer Science",
+//   },
+//   {
+//     id: "3u1reuv4",
+//     code: 'CSC 224',
+//     title: "Database",
+//     department: "Computer Science",
+//   },
+//   {
+//     id: "derv1ws0",
+//     code: 'CSC 221',
+//     title: "OOP C#",
+//     department: "Computer Science",
+//   },
+//   {
+//     id: "5kma53ae",
+//     code: 'MOS 221',
+//     title: "Microsoft Office",
+//     department: "Mathematics",
+//   },
+//   {
+//     id: "bhqecj4p",
+//     code: 'GST 221',
+//     title: "Peace & Conflict",
+//     department: "University Wide",
+//   },
+// ]
+
+// const departmentsData = [
+//   {
+//     id: "m5gr84i9",
+//     years: 4,
+//     name: "Computer Science",
+//     code: 'CSC',
+//   },
+//   {
+//     id: "3u1reuv4",
+//     years: 4,
+//     name: "Mathematics",
+//     code: "MAT",
+//   },
+//   {
+//     id: "derv1ws0",
+//     years: 5,
+//     name: "Electrical Engineering",
+//     code: "EIE",
+//   },
+//   {
+//     id: "5kma53ae",
+//     years: 4,
+//     name: "Mass Communication",
+//     code: "MCM",
+//   },
+//   {
+//     id: "bhqecj4p",
+//     years: 4,
+//     name: "International Relations",
+//     code: "IRL",
+//   },
+// ]
 
 export const coursesColumns = [
   {
@@ -358,6 +374,8 @@ export const departmentsColumns = [
   },
 ]
 
+console.log(viewsGotten, 2222222222)
+
 export default function DataTableDemo() {
   const [select, setSelect] = React.useState('Courses')
   const [data, setData] = React.useState([])
@@ -399,7 +417,7 @@ export default function DataTableDemo() {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center py-4">
+      <div className="flex justify-between space-x-6 items-center py-4">
         <Input
           placeholder={`Filter ${select}...`}
           value={(table.getColumn(select === 'Courses' ? "title" : "name")?.getFilterValue()) ?? ""}
@@ -545,4 +563,31 @@ export default function DataTableDemo() {
       </div>
     </div>
   )
+}
+
+
+function parseCourses(response) {
+  const parsedData = response.map(course => {
+    return {
+      id: Math.random().toString(36).substring(2, 8), // Generate random ID
+      code: course.code,
+      title: course.title,
+      department: course.departmentId.name
+    };
+  });
+
+  return parsedData;
+}
+
+function parseDepartments(response) {
+  const parsedData = response.map(department => {
+    return {
+      id: Math.random().toString(36).substring(2, 8), // Generate random ID
+      years: department.years || 4, // Assuming default years is 4
+      name: department.name,
+      code: department.code.toUpperCase() // Convert code to uppercase
+    };
+  });
+
+  return parsedData;
 }
