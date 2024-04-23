@@ -86,7 +86,7 @@ const views = [
 //   // console.log(item.courses.text)
 // });
 
-const data = [
+const coursesData = [
   {
     id: "m5gr84i9",
     code: 'CSC 222',
@@ -119,7 +119,40 @@ const data = [
   },
 ]
 
-export const columns = [
+const departmentsData = [
+  {
+    id: "m5gr84i9",
+    years: 4,
+    name: "Computer Science",
+    code: 'CSC',
+  },
+  {
+    id: "3u1reuv4",
+    years: 4,
+    name: "Mathematics",
+    code: "MAT",
+  },
+  {
+    id: "derv1ws0",
+    years: 5,
+    name: "Electrical Engineering",
+    code: "EIE",
+  },
+  {
+    id: "5kma53ae",
+    years: 4,
+    name: "Mass Communication",
+    code: "MCM",
+  },
+  {
+    id: "bhqecj4p",
+    years: 4,
+    name: "International Relations",
+    code: "IRL",
+  },
+]
+
+export const coursesColumns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -162,7 +195,7 @@ export const columns = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("department")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("department")}</div>,
   },
   {
     // accessorKey: "code",
@@ -183,14 +216,14 @@ export const columns = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Course Code
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("code")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
   },
   {
     id: "actions",
@@ -214,8 +247,113 @@ export const columns = [
               Copy payment ID
             </DropdownMenuItem> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Update courses</DropdownMenuItem>
-            <DropdownMenuItem>Delete courses</DropdownMenuItem>
+            <DropdownMenuItem>Update course</DropdownMenuItem>
+            <DropdownMenuItem>Delete course</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
+
+
+export const departmentsColumns = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("name")}</div>
+    ),
+  },
+  {
+    accessorKey: "code",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Department Code
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
+  },
+  {
+    // accessorKey: "code",
+    // header: () => <div className="text-right">code</div>,
+    // cell: ({ row }) => {
+    //   const code = parseFloat(row.getValue("code"))
+
+    //   // Format the code as a dollar code
+    //   const formatted = new Intl.NumberFormat("en-US", {
+    //     style: "currency",
+    //     currency: "USD",
+    //   }).format(code)
+
+    //   return <div className="text-right font-medium">{formatted}</div>
+    // },
+    accessorKey: "years",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Course Years
+          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("years")}</div>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            {/* <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Copy payment ID
+            </DropdownMenuItem> */}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Update department</DropdownMenuItem>
+            <DropdownMenuItem>Delete department</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -225,6 +363,17 @@ export const columns = [
 
 export default function DataTableDemo() {
   const [select, setSelect] = React.useState('Courses')
+  const [data, setData] = React.useState([])
+  const [columns, setColumns] = React.useState([])
+  React.useEffect(() => {
+    if (select === 'Courses') {
+      setData(coursesData)
+      setColumns(coursesColumns)
+    } else if (select === 'Departments') {
+      setData(departmentsData)
+      setColumns(departmentsColumns)
+    }
+  }, [select])
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState(
     []
@@ -259,16 +408,15 @@ export default function DataTableDemo() {
       <div className="flex items-center py-4">
         <Input
           placeholder={`Filter ${select}...`}
-          value={(table.getColumn("department")?.getFilterValue()) ?? ""}
+          value={(table.getColumn(select === 'Courses' ? "title" : "name")?.getFilterValue()) ?? ""}
           onChange={(event) =>
-            table.getColumn("department")?.setFilterValue(event.target.value)
+            table.getColumn(select === 'Courses' ? "title" : "name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Select
           value={select}
           onValueChange={setSelect}
-
         >
           <SelectTrigger className="">
             <SelectValue
