@@ -22,6 +22,7 @@ import { PlusCircle } from "lucide-react"
             // size="lg" 
             className="h-10 gap-2"
             variant="outline"
+            disabled={true}
         >
             {/***** CHANGE THE ICON ******/}
             <PlusCircle className="size-4" /> 
