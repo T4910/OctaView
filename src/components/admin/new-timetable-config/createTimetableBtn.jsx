@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button"
 import axios from 'axios'
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom"
 
 const serverLink = import.meta.env.VITE_SERVER_LINK
 
 export default function createTimetableBtn({setSchedule, details}) {
     const [loading, setLoading] = useState(false)
     const [anerror, setAnerror] = useState(false)
+    const navigate = useNavigate()
     const date = new Date()
   
     return (
@@ -55,6 +57,11 @@ export default function createTimetableBtn({setSchedule, details}) {
             try {
                 console.log('asking gpt')
 
+                if(response?.data?.courses.length === 0) {
+                    alert('No courses in database');
+                    navigate('/admin/settings/')
+                    return 
+                }
                 gptJSON = await askGPT(details, promptDetails);
                 
                 console.log('gpt response', gptJSON, '\npopulatin json...')
