@@ -414,7 +414,7 @@ export default function DataTableDemo() {
           className="max-w-sm"
         />
         <div className="flex space-x-4">
-          <AddRecord name={select} />
+          <AddRecord name={select.toLowerCase()} />
           <Select
           value={select}
           onValueChange={setSelect}
