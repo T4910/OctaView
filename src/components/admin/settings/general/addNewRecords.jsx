@@ -86,13 +86,13 @@ const newRecord = ({ name }) => {
 
     console.log(details, 329278)
     // alert(details)
-    if(record === 'courses'){
-      if(!(!!details?.title) || !(!!details?.code) || !(!!details?.level) || !(!!details?.instructorId) || !(!!details?.departmentId)) return
+    // if(record === 'courses'){
+    //   if(!(!!details?.title) || !(!!details?.code) || !(!!details?.level) || !(!!details?.instructorId) || !(!!details?.departmentId)) return
 
-    } else {
+    // } else {
 
-      if(!(!!details?.code) || !(!!details?.name) || !(!!details?.years)) return
-    }
+    //   if(!(!!details?.code) || !(!!details?.name) || !(!!details?.years)) return
+    // }
     const response = await axios.post(`${serverLink}/${record.slice(0, -1)}/add-${record.slice(0, -1)}`, details)
 
     console.log(response?.data[record])
