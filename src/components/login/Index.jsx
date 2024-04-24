@@ -41,7 +41,7 @@ function Login() {
                 if (response?.data?.role === 'faculty') {
                     navigate('/faculty')
                 } else if (response?.data?.role === 'admin') {
-                    navigate('/admin')
+                    navigate('/')
                 } else {
                     console.log(response?.data?.role)
                     navigate('/')
