@@ -9,7 +9,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 
   
@@ -22,7 +22,6 @@ import { PlusCircle } from "lucide-react"
             // size="lg" 
             className="h-10 gap-2"
             variant="outline"
-            disabled={true}
         >
             {/***** CHANGE THE ICON ******/}
             <PlusCircle className="size-4" /> 
@@ -38,10 +37,14 @@ import { PlusCircle } from "lucide-react"
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => {
-              !!action && action();
-              window.location.reload();
-            }}>Add {name}</AlertDialogAction>
+            <AlertDialogAction 
+              // disabled={true}
+              onClick={() => {
+                !!action && action();
+                // reload the page to add the record to the list in the table
+                window.location.reload(); 
+              }}
+            >Add {name}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -29,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import TLoader from '@/components/admin/settings/general/recordLoader'
 import AddRecord from "./addNewRecords"
 import {
   Select,
@@ -85,20 +86,7 @@ const views = [ 'Courses', 'Departments' ]
 //   // console.log(item.courses.text)
 // });
 
-const cresponse = await axios.post(`${serverLink}/course/get-course`, {})
-const dresponse = await axios.post(`${serverLink}/department/get-department`, {})
-const vresponse = await axios.post(`${serverLink}/venue/get-venue`, {})
 
-let viewsGotten = {
-  coursesData: parseCourses(cresponse?.data?.courses),
-  departmentsData: parseDepartments(dresponse?.data?.department),
-  venuesData: vresponse?.data?.venue,
-}
-
-
-
-const coursesData = viewsGotten?.coursesData??[]
-const departmentsData = viewsGotten?.departmentsData??[]
 // const coursesData = [
 //   {
 //     id: "m5gr84i9",
@@ -165,221 +153,224 @@ const departmentsData = viewsGotten?.departmentsData??[]
 //   },
 // ]
 
-export const coursesColumns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("title")}</div>
-    ),
-  },
-  {
-    accessorKey: "department",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Department
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="">{row.getValue("department")}</div>,
-  },
-  {
-    // accessorKey: "code",
-    // header: () => <div className="text-right">code</div>,
-    // cell: ({ row }) => {
-    //   const code = parseFloat(row.getValue("code"))
-
-    //   // Format the code as a dollar code
-    //   const formatted = new Intl.NumberFormat("en-US", {
-    //     style: "currency",
-    //     currency: "USD",
-    //   }).format(code)
-
-    //   return <div className="text-right font-medium">{formatted}</div>
-    // },
-    accessorKey: "code",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Course Code
-          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Update course</DropdownMenuItem>
-            <DropdownMenuItem>Delete course</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-
-export const departmentsColumns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("name")}</div>
-    ),
-  },
-  {
-    accessorKey: "code",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Department Code
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
-  },
-  {
-    // accessorKey: "code",
-    // header: () => <div className="text-right">code</div>,
-    // cell: ({ row }) => {
-    //   const code = parseFloat(row.getValue("code"))
-
-    //   // Format the code as a dollar code
-    //   const formatted = new Intl.NumberFormat("en-US", {
-    //     style: "currency",
-    //     currency: "USD",
-    //   }).format(code)
-
-    //   return <div className="text-right font-medium">{formatted}</div>
-    // },
-    accessorKey: "years",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Course Years
-          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("years")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Update department</DropdownMenuItem>
-            <DropdownMenuItem>Delete department</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-console.log(viewsGotten, 2222222222)
 
 export default function DataTableDemo() {
   const [select, setSelect] = React.useState('Courses')
   const [data, setData] = React.useState([])
   const [columns, setColumns] = React.useState([])
+  const [ viewsGotten, setViewsGotten ] = React.useState({
+    coursesData: [],
+    departmentsData: [],
+    venuesData: []
+  })
+
+  
+  let cresponse, dresponse, vresponse
+  
+  const [coursesData, setCoursesData] = React.useState([])
+  const [departmentsData, setDepartmentsData] = React.useState([]);
+  
+  React.useEffect(() => {
+    console.log('useEffect running...')
+    const insertResRecords = async () => {
+      cresponse = await axios.post(`${serverLink}/course/get-course`, {})
+      dresponse = await axios.post(`${serverLink}/department/get-department`, {})
+      vresponse = await axios.post(`${serverLink}/venue/get-venue`, {})
+      console.log('a',87866)
+    
+      // setViewsGotten({
+        setCoursesData(await parseCourses(cresponse?.data?.courses)??[]);
+        setDepartmentsData(await parseDepartments(dresponse?.data?.department)??[]);
+        // venuesData: vresponse?.data?.venue??[],
+      // })
+    }
+
+    insertResRecords()
+  }, []);
+
+  console.log(viewsGotten, 888)
+  // coursesData = viewsGotten?.coursesData??[]
+  // departmentsData = viewsGotten?.departmentsData??[]
+
+  const coursesColumns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("title")}</div>
+      ),
+    },
+    {
+      accessorKey: "department",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Department
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="">{row.getValue("department")}</div>,
+    },
+    {
+      accessorKey: "code",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Course Code
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Update</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+  
+  const departmentsColumns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("name")}</div>
+      ),
+    },
+    {
+      accessorKey: "code",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Department Code
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="">{row.getValue("code")}</div>,
+    },
+    {
+      accessorKey: "years",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Course Years
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("years")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              {/* <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(payment.id)}
+              >
+                Copy payment ID
+              </DropdownMenuItem> */}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Update department</DropdownMenuItem>
+              <DropdownMenuItem>Delete department</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+  
+console.log(viewsGotten, 2222222222)
+
   React.useEffect(() => {
     if (select === 'Courses') {
       setData(coursesData)
@@ -388,7 +379,7 @@ export default function DataTableDemo() {
       setData(departmentsData)
       setColumns(departmentsColumns)
     }
-  }, [select])
+  }, [select, coursesData, departmentsData])
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
@@ -414,7 +405,7 @@ export default function DataTableDemo() {
   })
 
   // console.log('ain slecet', select)
-
+  console.log(cresponse); 
   return (
     <div className="w-full">
       <div className="flex justify-between space-x-6 items-center py-4">
@@ -525,19 +516,21 @@ export default function DataTableDemo() {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              // (viewsGotten?.coursesData.length !== 0)
+              (<TableRow>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   No results.
                 </TableCell>
-              </TableRow>
+              </TableRow>)
+              // : (<>< TLoader /></>) 
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      {/* <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -560,14 +553,14 @@ export default function DataTableDemo() {
             Next
           </Button>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
 
 
-function parseCourses(response) {
-  const parsedData = response.map(course => {
+async function parseCourses(response) {
+  const parsedData = await response?.map(course => {
     return {
       id: Math.random().toString(36).substring(2, 8), // Generate random ID
       code: course.code,
@@ -576,11 +569,12 @@ function parseCourses(response) {
     };
   });
 
+  console.log(parsedData)
   return parsedData;
 }
 
-function parseDepartments(response) {
-  const parsedData = response.map(department => {
+async function parseDepartments(response) {
+  const parsedData = await response?.map(department => {
     return {
       id: Math.random().toString(36).substring(2, 8), // Generate random ID
       years: department.years || 4, // Assuming default years is 4

@@ -91,7 +91,7 @@ const departmentSelection = ({ contentClassName, triggerClassName, enabled, enab
                           onSelect={(currentValue) => {
                             console.log(value, currentValue)
                             setValue(currentValue === value ? "" : currentValue);
-                            setDepartment(currentValue === value ? "" : currentValue);
+                            !!setDepartment && setDepartment(currentValue === value ? "" : currentValue);
                             setOpen(false);
                           }}
                         >
