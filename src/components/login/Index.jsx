@@ -41,26 +41,26 @@ function Login() {
                 if (response?.data?.role === 'faculty') {
                     navigate('/faculty')
                 } else if (response?.data?.role === 'admin') {
-                    navigate('/')
+                    navigate('/admin')
                 } else {
                     console.log(response?.data?.role)
-                    navigate('/')
+                    navigate('/admin')
                 }
             } else {
 
 
-              return navigate('/')
+              return navigate('/admin')
               setError(response?.data?.message || response)
             }
         } catch (error) {
             console.log(error, 9876)
-          return navigate('/')
+          return navigate('/admin')
             setError(error?.response?.data?.message);
         }
 
       
         setIsLoading(false);
-      return navigate('/')
+      return navigate('/admin')
     }
 
     return (
