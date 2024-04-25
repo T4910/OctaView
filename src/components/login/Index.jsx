@@ -47,14 +47,20 @@ function Login() {
                     navigate('/')
                 }
             } else {
-                setError(response?.data?.message || response)
+
+
+              return navigate('/')
+              setError(response?.data?.message || response)
             }
         } catch (error) {
             console.log(error, 9876)
+          return navigate('/')
             setError(error?.response?.data?.message);
         }
 
+      
         setIsLoading(false);
+      return navigate('/')
     }
 
     return (
