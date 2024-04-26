@@ -39,8 +39,8 @@ import { PlusCircle } from "lucide-react"
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               // disabled={true}
-              onClick={() => {
-                !!action && action();
+              onClick={async () => {
+                !!action && await action();
                 // reload the page to add the record to the list in the table
                 window.location.reload(); 
               }}
