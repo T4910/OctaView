@@ -15,7 +15,7 @@ export default function Root() {
   
   useEffect(() => {
     async function fetchTimetable(){
-      console.log('fetchTimetable is working...')
+      console.log('fetchTimetable is working... Using server: ', serverLink);
       try {
         console.log('tryblock is working...')
         const response = await axios.post(`${serverLink}/timetable/get-timetable`, { current: true });
