@@ -18,16 +18,16 @@ const serverLink = import.meta.env.VITE_SERVER_LINK
 const newRecord = ({ name }) => {
   let details = {};
 
-  const [ courseTitle, setCourseTitle ] = useState("Compute Hardware")
-  const [ courseCode, setCourseCode ] = useState("CSC 292")
+  const [ courseTitle, setCourseTitle ] = useState("")
+  const [ courseCode, setCourseCode ] = useState("")
   const [ courseDescription, setCourseDescription ] = useState("")
   const [ courseLevel, setCourseLevel ] = useState('')
   const [ courseInstructor, setCourseInstructor ] = useState("Mr. Shaba")
   const departmentState = useState("")
   const levelState = useState("")
 
-  const [ departmentTitle, setDepartmentTitle ] = useState("Computer Science")
-  const [ departmentCode, setDepartmentCode ] = useState("csc")
+  const [ departmentTitle, setDepartmentTitle ] = useState("")
+  const [ departmentCode, setDepartmentCode ] = useState("")
   const [ departmentLocation, setDepartmentLocation ] = useState("")
   const [ departmentYear, setDepartmentYear ] = useState(4)
 
@@ -115,9 +115,9 @@ const CourseForm = ({ departmentState, className, title, setTitle, code, setCode
   return (
     <div>
       <Label htmlFor="name">Course Title</Label>
-      <Input value={title} onChange={(e) => setTitle(e.target.value)} type="text" name="name"/>
+      <Input value={title} onChange={(e) => setTitle(e.target.value)} type="text" name="name" placeholder="Object Oriented Programming"/>
       <Label htmlFor="code">Course Code</Label>
-      <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" name="code"/>
+      <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" name="code" placeholder="CSC 211"/>
       <Label htmlFor="department">Department</Label>
       <Departmnets outsideValueState={departmentState}/>
       <Label htmlFor="level">Level</Label>
@@ -130,9 +130,9 @@ const DepartmentForm = ({ title, setTitle, code, setCode, location, setLocation,
   return (
     <div>
       <Label htmlFor="name">Department Name</Label>
-      <Input type="text" name="name" value={title} onChange={(e) => setTitle(e.target.value)}/>
+      <Input type="text" name="name" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Biochemistry"/>
       <Label htmlFor="code">Department Code</Label>
-      <Input type="text" name="code"  value={code} onChange={(e) => setCode(e.target.value)}/>
+      <Input type="text" name="code"  value={code} onChange={(e) => setCode(e.target.value)} placeholder="bch"/>
       <Label htmlFor="year">Department Year</Label>
       <Select name="year"
               value={year}
