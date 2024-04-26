@@ -57,7 +57,7 @@ export default function Root() {
             }
             
         } catch (error) {
-            console.log('Error while fetching timetables...', err)
+            console.log('Error while fetching timetables...', error)
         }
     }
 

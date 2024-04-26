@@ -269,8 +269,8 @@ export default function DataTableDemo() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Update</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem disabled={true}>Update</DropdownMenuItem>
+              <DropdownMenuItem disabled={true}>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
@@ -516,7 +516,7 @@ console.log(viewsGotten, 2222222222)
                 </TableRow>
               ))
             ) : (
-              // (viewsGotten?.coursesData.length !== 0)
+              (viewsGotten?.coursesData.length !== 0) ?
               (<TableRow>
                 <TableCell
                   colSpan={columns.length}
@@ -525,7 +525,7 @@ console.log(viewsGotten, 2222222222)
                   No results.
                 </TableCell>
               </TableRow>)
-              // : (<>< TLoader /></>) 
+              : (<>< TLoader /></>) 
             )}
           </TableBody>
         </Table>

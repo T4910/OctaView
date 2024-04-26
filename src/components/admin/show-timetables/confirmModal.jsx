@@ -26,7 +26,7 @@ export default function AlertDialogDemo({children, description, title, action, r
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => {
+          <AlertDialogAction disabled={true} onClick={() => {
             // action();
             console.log('deletings...');
             !!redirect && navigate(redirect);

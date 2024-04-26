@@ -81,6 +81,7 @@ function Login() {
                             id="email" 
                             type="email" 
                             placeholder="firstname.lastname@lmu.edu.ng" 
+                            value="ayomide.akintola@lmu.edu.ng"                            
                             required 
                         />
                     </div>
@@ -91,6 +92,7 @@ function Login() {
                             id="password" 
                             type="password" 
                             placeholder="********" 
+                            value="password123"
                             required 
                         />
                     </div>

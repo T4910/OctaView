@@ -15,7 +15,7 @@ export default function createTimetableBtn({setSchedule, details}) {
         <Button 
         disabled={loading}
         onClick={async () => {
-            let gptJSON, timeslotSchedule;
+            let gptJSON, timeslotSchedule, response;
             console.log(details, 32939832)
             const {name, description, current, examMode, interval, startTime,
                 endTime, currentYear,  startDay, endDay, semester, level, selectedDepartment, allDepartments} = details
@@ -30,7 +30,7 @@ export default function createTimetableBtn({setSchedule, details}) {
             for (let index = 0; index < departmentsToBeEntered.length; index++) {
                 const department = departmentsToBeEntered[index];
                 
-                const response = await axios.post(`${serverLink}/course/get-course`, (level === 'all') ? {departmentId: department._id} : { departmentId: department._id, level });
+                response = await axios.post(`${serverLink}/course/get-course`, (level === 'all') ? {departmentId: department._id} : { departmentId: department._id, level });
 
                 coursesForAI = [...coursesForAI, ...response?.data?.courses]
             }
@@ -57,11 +57,11 @@ export default function createTimetableBtn({setSchedule, details}) {
             try {
                 console.log('asking gpt')
 
-                if(response?.data?.courses.length === 0) {
-                    alert('No courses in database');
-                    navigate('/admin/settings/')
-                    return 
-                }
+                // if(response?.data?.courses.length === 0) {
+                //     alert('No courses in database');
+                //     navigate('/admin/settings/')
+                //     return 
+                // }
                 gptJSON = await askGPT(details, promptDetails);
                 
                 console.log('gpt response', gptJSON, '\npopulatin json...')
@@ -146,7 +146,10 @@ async function askGPT({ courses, departments, venues, startTime, endTime, interv
         - Do not be too strict with how the details are entered, be FLEXIBLE when receiving details
         - if you have an err, return your output in JSON in the following manmer --> {err: state your error here}
         - Avoid time & venue clashes
+        - Don't responsed with an apology
+        - Your resonse should be in a json format
         - Courses can only repeat once in the schedule
+        - On NO account should you return the inputs I gave you as your response
         - AND MOST IMPORTANT RULE OF ALL: output ONLY JSON as your response, NOTHING ELSE!!!
         `
         
