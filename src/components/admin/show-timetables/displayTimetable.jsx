@@ -26,8 +26,8 @@ export default function dispalyTimetable() {
               timing: {startDay, endDay, startHour, endHour} 
             } = response?.data?.timetables;
 
-            let cleanedSchedule = {}
-            schedule.forEach((timeslot) => (cleanedSchedule = {...cleanedSchedule, ...convertRawSchedule(timeslot)}));
+            let cleanedSchedule = convertRawSchedule(schedule)
+            // schedule.forEach((timeslot) => (cleanedSchedule = {...cleanedSchedule, ...convertRawSchedule(timeslot)}));
             
             
             const timetableData = {
@@ -115,44 +115,43 @@ export default function dispalyTimetable() {
 }
 
 function convertRawSchedule(inputData) {
-    let output = {};
+  let output = {};
 
-    // Extracting relevant information from inputData
-    let level = inputData.level;
-    let departmentName = inputData.departmentId.code;
-    let day = inputData.day.toLowerCase();
+  inputData.forEach(entry => {
+      let level = entry.level;
+      let departmentCode = entry.departmentId.code;
+      let day = entry.day.toLowerCase();
 
-    // Creating a dictionary for the course
-    let courseInfo = {
-        code: inputData.courseId.code,
-        name: inputData.courseId.title,
-        startTime: inputData.startTime,
-        endTime: inputData.endTime,
-        event: {
-          type: inputData.event,
-          coordinator: inputData.coordinator
-        }
-    };
+      // Creating a dictionary for the course
+      let courseInfo = {
+          code: entry.courseId.code,
+          name: entry.courseId.title,
+          startTime: entry.startTime,
+          endTime: entry.endTime,
+          event: {
+              type: entry.event,
+              coordinator: entry.coordinator
+          }
+      };
 
-    // Checking if department exists in the output object
-    if (!output.hasOwnProperty(departmentName)) {
-        output[departmentName] = {};
-        output[departmentName][level] = {};
-        output[departmentName][level][day] = [courseInfo];
-    } else {
-        // Checking if the level exists for the department
-        if (!output[departmentName].hasOwnProperty(level)) {
-            output[departmentName][level] = {};
-            output[departmentName][level][day] = [courseInfo];
-        } else {
-            // Checking if the day exists for the level
-            if (!output[departmentName][level].hasOwnProperty(day)) {
-                output[departmentName][level][day] = [courseInfo];
-            } else {
-                output[departmentName][level][day].push(courseInfo);
-            }
-        }
-    }
+      // If department code doesn't exist in output, initialize it
+      if (!output.hasOwnProperty(departmentCode)) {
+          output[departmentCode] = {};
+      }
 
-    return output;
+      // If level doesn't exist in output, initialize it
+      if (!output[departmentCode].hasOwnProperty(level)) {
+          output[departmentCode][level] = {};
+      }
+
+      // If day doesn't exist for the level, initialize it
+      if (!output[departmentCode][level].hasOwnProperty(day)) {
+          output[departmentCode][level][day] = [];
+      }
+
+      // Push course info into output
+      output[departmentCode][level][day].push(courseInfo);
+  });
+
+  return output;
 }
