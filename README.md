@@ -2,6 +2,7 @@
 ### OctaView
 
  check out backend [here](https://github.com/T4910/OctaEngine)
+ view the live page [here](https://octa-view.brimble.app/)
 
 ## Requirements
 
